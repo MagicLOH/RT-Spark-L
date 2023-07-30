@@ -61,6 +61,7 @@ rt_err_t SD_GetFileInfos(const char *path, NovelInfo_t *novel)
 
 void SD_Init(void)
 {
+    LOG_I("Waiting for fs mount ok.");
     rt_thread_mdelay(1000);
 
     if (dfs_mount("sd0", "/sdcard", "elm", 0, 0) == RT_EOK)
