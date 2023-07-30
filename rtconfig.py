@@ -1,9 +1,9 @@
 import os
 
 # toolchains options
-ARCH='arm'
-CPU='cortex-m4'
-CROSS_TOOL='gcc'
+ARCH = 'arm'
+CPU = 'cortex-m4'
+CROSS_TOOL = 'gcc'
 
 # bsp lib config
 BSP_LIBRARY_TYPE = None
@@ -15,20 +15,20 @@ if os.getenv('RTT_ROOT'):
 
 # cross_tool provides the cross compiler
 # EXEC_PATH is the compiler execute path, for example, CodeSourcery, Keil MDK, IAR
-if  CROSS_TOOL == 'gcc':
-    PLATFORM    = 'gcc'
-    EXEC_PATH   = r'C:\Users\XXYYZZ'
+if CROSS_TOOL == 'gcc':
+    PLATFORM = 'gcc'
+    EXEC_PATH = r'C:\Users\XXYYZZ'
 elif CROSS_TOOL == 'keil':
-    PLATFORM    = 'armcc'
-    EXEC_PATH   = r'C:/Keil_v5'
+    PLATFORM = 'armcc'
+    EXEC_PATH = r'C:/Keil_v5'
 elif CROSS_TOOL == 'iar':
-    PLATFORM    = 'iccarm'
-    EXEC_PATH   = r'C:/Program Files (x86)/IAR Systems/Embedded Workbench 8.3'
+    PLATFORM = 'iccarm'
+    EXEC_PATH = r'C:/Program Files (x86)/IAR Systems/Embedded Workbench 8.3'
 
 if os.getenv('RTT_EXEC_PATH'):
     EXEC_PATH = os.getenv('RTT_EXEC_PATH')
 
-BUILD = 'release'
+BUILD = 'debug'
 
 if PLATFORM == 'gcc':
     # toolchains
@@ -57,7 +57,7 @@ if PLATFORM == 'gcc':
     else:
         CFLAGS += ' -O2'
 
-    CXXFLAGS = CFLAGS 
+    CXXFLAGS = CFLAGS
 
     POST_ACTION = OBJCPY + ' -O binary $TARGET rtthread.bin\n' + SIZE + ' $TARGET \n'
 
@@ -88,7 +88,7 @@ elif PLATFORM == 'armcc':
     else:
         CFLAGS += ' -O2'
 
-    CXXFLAGS = CFLAGS 
+    CXXFLAGS = CFLAGS
     CFLAGS += ' -std=c99'
 
     POST_ACTION = 'fromelf --bin $TARGET --output rtthread.bin \nfromelf -z $TARGET'
@@ -117,11 +117,11 @@ elif PLATFORM == 'armclang':
     EXEC_PATH += '/ARM/ARMCLANG/bin/'
 
     if BUILD == 'debug':
-        CFLAGS += ' -g -O1' # armclang recommend
+        CFLAGS += ' -g -O1'  # armclang recommend
         AFLAGS += ' -g'
     else:
         CFLAGS += ' -O2'
-        
+
     CXXFLAGS = CFLAGS
     CFLAGS += ' -std=c99'
 
@@ -172,9 +172,10 @@ elif PLATFORM == 'iccarm':
     LFLAGS += ' --entry __iar_program_start'
 
     CXXFLAGS = CFLAGS
-    
+
     EXEC_PATH = EXEC_PATH + '/arm/bin/'
     POST_ACTION = 'ielftool --bin $TARGET rtthread.bin'
+
 
 def dist_handle(BSP_ROOT, dist_dir):
     import sys

@@ -20,6 +20,8 @@ if GetDepend(['BSP_USING_ONBOARD_LCD']):
     src += Glob('LCD_ST7789/Drv_ST7789.c')
     path += [cwd + '/LCD_ST7789']
     
+if GetDepend(['BSP_USING_FS']):
+    src += Glob('Drv_FileSystem.c')
 
 CPPDEFINES = ['STM32F407xx']
 group = DefineGroup('Drivers', src, depend = [''], CPPPATH = path, CPPDEFINES = CPPDEFINES)

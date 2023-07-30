@@ -57,6 +57,7 @@
 #define RT_USING_USER_MAIN
 #define RT_MAIN_THREAD_STACK_SIZE 2048
 #define RT_MAIN_THREAD_PRIORITY 10
+#define RT_USING_LEGACY
 #define RT_USING_MSH
 #define RT_USING_FINSH
 #define FINSH_USING_MSH
@@ -70,6 +71,28 @@
 #define MSH_USING_BUILT_IN_COMMANDS
 #define FINSH_USING_DESCRIPTION
 #define FINSH_ARG_MAX 10
+#define RT_USING_DFS
+#define DFS_USING_POSIX
+#define DFS_USING_WORKDIR
+#define DFS_FILESYSTEMS_MAX 4
+#define DFS_FILESYSTEM_TYPES_MAX 4
+#define DFS_FD_MAX 16
+#define RT_USING_DFS_ELMFAT
+
+/* elm-chan's FatFs, Generic FAT Filesystem Module */
+
+#define RT_DFS_ELM_CODE_PAGE 437
+#define RT_DFS_ELM_WORD_ACCESS
+#define RT_DFS_ELM_USE_LFN_3
+#define RT_DFS_ELM_USE_LFN 3
+#define RT_DFS_ELM_LFN_UNICODE_0
+#define RT_DFS_ELM_LFN_UNICODE 0
+#define RT_DFS_ELM_MAX_LFN 255
+#define RT_DFS_ELM_DRIVES 2
+#define RT_DFS_ELM_MAX_SECTOR_SIZE 512
+#define RT_DFS_ELM_REENTRANT
+#define RT_DFS_ELM_MUTEX_TIMEOUT 3000
+#define RT_USING_DFS_ROMFS
 
 /* Device Drivers */
 
@@ -81,6 +104,14 @@
 #define RT_USING_HWTIMER
 #define RT_USING_PIN
 #define RT_USING_PWM
+#define RT_USING_RTC
+#define RT_USING_SDIO
+#define RT_SDIO_STACK_SIZE 512
+#define RT_SDIO_THREAD_PRIORITY 15
+#define RT_MMCSD_STACK_SIZE 1024
+#define RT_MMCSD_THREAD_PREORITY 22
+#define RT_MMCSD_MAX_PARTITION 16
+#define RT_SDIO_DEBUG
 
 /* Using USB */
 
@@ -136,13 +167,6 @@
 
 /* LVGL: powerful and easy-to-use embedded GUI library */
 
-#define PKG_USING_LVGL
-#define PKG_LVGL_THREAD_PRIO 20
-#define PKG_LVGL_THREAD_STACK_SIZE 4096
-#define PKG_LVGL_DISP_REFR_PERIOD 5
-#define PKG_LVGL_USING_DEMOS
-#define PKG_LVGL_USING_V08035
-#define PKG_LVGL_VER_NUM 0x08035
 
 /* u8g2: a monochrome graphic library */
 
@@ -171,6 +195,7 @@
 
 /* touch drivers */
 
+#define SDIO_MAX_FREQ 1000000
 
 /* Kendryte SDK */
 
@@ -235,21 +260,24 @@
 /* Onboard Peripheral Drivers */
 
 #define BSP_USING_SRAM
+#define BSP_USING_EXT_FMC_IO
+#define BSP_USING_FMC
 #define BSP_USING_ONBOARD_LCD
 #define BSP_USING_ONBOARD_LCD_PWM_BL
+#define BSP_USING_FS
+#define BSP_USING_SDCARD_FATFS
 
 /* On-chip Peripheral Drivers */
 
 #define BSP_USING_GPIO
 #define BSP_USING_UART
 #define BSP_USING_UART1
-#define BSP_USING_TIM
-#define BSP_USING_TIM11
 #define BSP_USING_PWM
 #define BSP_USING_PWM14
 #define BSP_USING_PWM14_CH1
-#define BSP_USING_EXT_FMC_IO
-#define BSP_USING_FMC
+#define BSP_USING_ONCHIP_RTC
+#define BSP_RTC_USING_LSE
+#define BSP_USING_SDIO
 
 /* Board extended module Drivers */
 

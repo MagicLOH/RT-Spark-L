@@ -9,13 +9,13 @@
 
 typedef struct NovelInfo
 {
-	char path[64];
-	char name[32];
-	ssize_t size;
-	ssize_t pages;
-	ssize_t offset;
-}NovelInfo_t;
+    char path[64];
+    char name[32];
+    ssize_t size;
+    ssize_t pages;
+    ssize_t offset;
+} NovelInfo_t;
 
-rt_err_t SD_Init(void);
+void SD_Init(void);
 
 #endif //_HAL_SDCARD_H_

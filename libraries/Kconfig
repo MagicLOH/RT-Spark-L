@@ -22,6 +22,15 @@ menu "Onboard Peripheral Drivers"
         select BSP_USING_EXT_FMC_IO
         select BSP_USING_FMC
         default n
+    if BSP_USING_SRAM
+        config BSP_USING_EXT_FMC_IO
+                bool "SRAM used EXT_FMC_IO"
+                default n
+
+        config BSP_USING_FMC
+                bool "SRAM used FMC"
+                default n
+    endif
 
     config BSP_USING_ONBOARD_LCD
         bool "Enable LCD(ST7787)"
@@ -44,6 +53,25 @@ menu "Onboard Peripheral Drivers"
             bool "Enable LVGL demo"
             default n
     endif
+
+    menuconfig BSP_USING_FS
+        bool "Enable File System"
+        select RT_USING_DFS
+        select RT_USING_DFS_ROMFS
+        default n
+
+        if BSP_USING_FS
+            config BSP_USING_SDCARD_FATFS
+                bool "Enable SDCARD (FATFS)"
+                select BSP_USING_SDIO
+                select RT_USING_DFS_ELMFAT
+                default y
+            if BSP_USING_SDCARD_FATFS
+                menuconfig BSP_USING_FS_AUTO_MOUNT
+                    bool "Enable filesystem auto mount"
+                    default n
+            endif
+        endif
 
 endmenu
 
@@ -125,14 +153,35 @@ menu "On-chip Peripheral Drivers"
                     default n
             endif
         endif
-	
-    config BSP_USING_EXT_FMC_IO
-        bool "SRAM used EXT_FMC_IO"
-        default n
 
-    config BSP_USING_FMC
-        bool "SRAM used FMC"
-        default n  
+	menuconfig BSP_USING_ONCHIP_RTC
+            bool "Enable RTC"
+            select RT_USING_RTC
+            default n
+            if BSP_USING_ONCHIP_RTC
+                choice
+                    prompt "Select clock source"
+                    default BSP_RTC_USING_LSE
+
+                    config BSP_RTC_USING_LSE
+                        bool "RTC USING LSE"
+
+                    config BSP_RTC_USING_LSI
+                        bool "RTC USING LSI"
+                endchoice
+            endif
+
+     config BSP_USING_SDIO
+         bool "Enable SDIO"
+         select RT_USING_SDIO
+         select RT_USING_DFS
+         default n
+     config SDIO_MAX_FREQ
+         int "sdio max freq"
+         range 0 24000000
+         depends on BSP_USING_SDIO
+         default 1000000
+
     source "$RTT_DIR/../libraries/HAL_Drivers/Kconfig" 
     
 endmenu

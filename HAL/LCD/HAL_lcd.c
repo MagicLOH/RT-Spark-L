@@ -1,4 +1,4 @@
-#include "HAL_LCD.h"
+#include "HAL_lcd.h"
 
 #include <rtthread.h>
 #include "Drv_ST7789.h"

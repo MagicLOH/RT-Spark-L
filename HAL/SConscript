@@ -18,8 +18,18 @@ path += [cwd + '/Button']
 
 #add lcd hal
 if GetDepend(['BSP_USING_ONBOARD_LCD']):
-    src += Glob('LCD/HAL_LCD.c')
+    src += Glob('LCD/HAL_lcd.c')
     path += [cwd + '/LCD']
+
+#add rtc hal
+if GetDepend(['BSP_USING_ONCHIP_RTC']):
+    src += Glob('RTC/HAL_rtc.c')
+    path += [cwd + '/RTC']
+
+#add sd hal
+if GetDepend(['BSP_USING_SDCARD_FATFS']):
+    src += Glob('SDCard/HAL_sdcard.c')
+    path += [cwd + '/SDCard']
     
 
 CPPDEFINES = ['STM32F407xx']

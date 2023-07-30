@@ -273,10 +273,11 @@ static uint8_t bsp_button_read_pin(uint8_t btn_id)
 
 // callback functions
 static void cb_onPressUp(void *arg);
-
 static void cb_onPressDown(void *arg);
-
 static void cb_onSingleClicked(void *arg);
+static void cb_timeout(void *arg);
+
+static void Button_TimerEvent(void);
 
 /**
  * @brief Button_Init
@@ -300,8 +301,8 @@ void MultiButton_Init(void)
     button_init(&btnRight, bsp_button_read_pin, btnActiveStatus, btnRight_id);
 
     button_attach(&btnUp, SINGLE_CLICK, &cb_onSingleClicked);
-    button_attach(&btnUp, PRESS_UP, &cb_onPressUp);
-    button_attach(&btnUp, PRESS_DOWN, &cb_onPressDown);
+//    button_attach(&btnUp, PRESS_UP, &cb_onPressUp);
+//    button_attach(&btnUp, PRESS_DOWN, &cb_onPressDown);
     button_attach(&btnDown, SINGLE_CLICK, &cb_onSingleClicked);
     button_attach(&btnRight, SINGLE_CLICK, &cb_onSingleClicked);
     button_attach(&btnLeft, SINGLE_CLICK, &cb_onSingleClicked);
@@ -310,6 +311,30 @@ void MultiButton_Init(void)
     button_start(&btnDown);
     button_start(&btnRight);
     button_start(&btnLeft);
+
+    Button_TimerEvent(); // 注册定时器监控 5ms间隔
+}
+
+static void cb_timeout(void *arg)
+{
+    button_ticks();
+//    rt_thread_mdelay(5);
+}
+
+static void Button_TimerEvent(void)
+{
+    rt_err_t err = RT_EOK;
+    static rt_timer_t timer;
+
+    // 5ms period timer
+    timer = rt_timer_create("periodTimer", cb_timeout, RT_NULL,
+                            TICKS_INTERVAL, RT_TIMER_FLAG_PERIODIC);
+    RT_ASSERT(timer);
+    if (err = rt_timer_start(timer) != RT_EOK)
+    {
+        LOG_E("rt_timer_start failed!");
+        return;
+    }
 }
 
 static void cb_onPressUp(void *arg)
