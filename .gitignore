@@ -40,7 +40,5 @@ settings/
 *.uvguix*
 cconfig.h
 .idea
-libraries
 packages
-rt-thread
 CMakeLists.txt
