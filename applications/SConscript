@@ -1,0 +1,25 @@
+from building import *
+import os
+
+cwd     = GetCurrentDir()
+CPPPATH = [cwd]
+CPPPATH += [cwd + '/Pages/Novel']
+CPPPATH += [cwd + '/Pages/StartUp']
+CPPPATH += [cwd + '/Pages/StatusBar']
+CPPPATH += [cwd + '/Pages/SystemInfos']
+
+src = Glob('*.c')
+src += Glob('Pages/StartUp/*.cpp')
+src += Glob('Pages/StatusBar/*.cpp')
+src += Glob('Pages/SystemInfos/*.cpp')
+src += Glob('Pages/Novel/*.cpp')
+
+group = DefineGroup('Applications', src, depend = [''], CPPPATH = CPPPATH)
+
+list = os.listdir(cwd)
+for item in list:
+    if os.path.isfile(os.path.join(cwd, item, 'SConscript')):
+        group = group + SConscript(os.path.join(item, 'SConscript'))
+
+Return('group')
+

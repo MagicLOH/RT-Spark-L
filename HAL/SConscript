@@ -1,0 +1,33 @@
+import os
+import rtconfig
+from building import *
+
+Import('SDK_LIB')
+
+cwd = GetCurrentDir()
+
+# add general drivers
+src = []
+path =  [cwd]
+
+src += Glob('*.c')
+
+# add button hal
+src += Glob('Button/HAL_button.c')
+path += [cwd + '/Button']
+
+#add lcd hal
+if GetDepend(['BSP_USING_ONBOARD_LCD']):
+    src += Glob('LCD/HAL_LCD.c')
+    path += [cwd + '/LCD']
+    
+
+CPPDEFINES = ['STM32F407xx']
+group = DefineGroup('Drivers', src, depend = [''], CPPPATH = path, CPPDEFINES = CPPDEFINES)
+
+list = os.listdir(cwd)
+for item in list:
+    if os.path.isfile(os.path.join(cwd, item, 'SConscript')):
+        group = group + SConscript(os.path.join(item, 'SConscript'))
+
+Return('group')
