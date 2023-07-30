@@ -31,30 +31,30 @@ typedef void (*BtnCallback)(void *);
 
 typedef enum
 {
-	PRESS_DOWN = 0,
-	PRESS_UP,
-	PRESS_REPEAT,
-	SINGLE_CLICK,
-	DOUBLE_CLICK,
-	LONG_PRESS_START,
-	LONG_PRESS_HOLD,
-	number_of_event,
-	NONE_PRESS
+    PRESS_DOWN = 0,
+    PRESS_UP,
+    PRESS_REPEAT,
+    SINGLE_CLICK,
+    DOUBLE_CLICK,
+    LONG_PRESS_START,
+    LONG_PRESS_HOLD,
+    number_of_event,
+    NONE_PRESS
 } PressEvent;
 
 typedef struct Button
 {
-	uint16_t ticks;
-	uint8_t repeat: 4;
-	uint8_t event: 4;
-	uint8_t state: 3;
-	uint8_t debounce_cnt: 3;
-	uint8_t active_level: 1;
-	uint8_t button_level: 1;
-	uint8_t button_id;
-	uint8_t (*hal_button_Level)(uint8_t button_id_);
-	BtnCallback cb[number_of_event];
-	struct Button *next;
+    uint16_t ticks;
+    uint8_t repeat: 4;
+    uint8_t event: 4;
+    uint8_t state: 3;
+    uint8_t debounce_cnt: 3;
+    uint8_t active_level: 1;
+    uint8_t button_level: 1;
+    uint8_t button_id;
+    uint8_t (*hal_button_Level)(uint8_t button_id_);
+    BtnCallback cb[number_of_event];
+    struct Button *next;
 } Button;
 
 #ifdef __cplusplus
@@ -69,7 +69,7 @@ void button_stop(struct Button *handle);
 void button_ticks(void);
 
 
-void MultiButton_Init(void);
+void Button_Init(void);
 
 #ifdef __cplusplus
 }

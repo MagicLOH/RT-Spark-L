@@ -283,7 +283,7 @@ static void Button_TimerEvent(void);
  * @brief Button_Init
  * @param none
  */
-void MultiButton_Init(void)
+void Button_Init(void)
 {
     rt_pin_mode(BTN_PIN_UP, PIN_MODE_INPUT_PULLUP);
     rt_pin_mode(BTN_PIN_DOWN, PIN_MODE_INPUT_PULLUP);

@@ -17,5 +17,6 @@ typedef struct NovelInfo
 } NovelInfo_t;
 
 void SD_Init(void);
+rt_err_t SD_GetFileInfos(const char *path, NovelInfo_t *novel);
 
 #endif //_HAL_SDCARD_H_

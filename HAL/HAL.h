@@ -5,6 +5,11 @@
 #ifndef _HAL_H_
 #define _HAL_H_
 
+#include "HAL_button.h"
+#include "HAL_lcd.h"
+#include "HAL_rtc.h"
+#include "HAL_sdcard.h"
+
 int HAL_In1t(void);
 
 #endif //_HAL_H_
