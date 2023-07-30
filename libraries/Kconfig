@@ -1,0 +1,144 @@
+config SOC_FAMILY_STM32
+    bool
+    
+config SOC_SERIES_STM32F4
+    bool
+    select ARCH_ARM_CORTEX_M4
+    select SOC_FAMILY_STM32
+
+menu "Hardware Drivers Config"
+
+config SOC_STM32F407ZG
+    bool
+    select SOC_SERIES_STM32F4
+    select RT_USING_COMPONENTS_INIT
+    select RT_USING_USER_MAIN
+    default y
+
+menu "Onboard Peripheral Drivers"
+
+	config BSP_USING_SRAM
+        bool "Enable SRAM"
+        select BSP_USING_EXT_FMC_IO
+        select BSP_USING_FMC
+        default n
+
+    config BSP_USING_ONBOARD_LCD
+        bool "Enable LCD(ST7787)"
+        select BSP_USING_SRAM
+        default n
+        if BSP_USING_ONBOARD_LCD
+            config BSP_USING_ONBOARD_LCD_PWM_BL
+                bool "Enable pwm background light"
+                default y
+                select BSP_USING_PWM
+                select BSP_USING_PWM14
+                select BSP_USING_PWM14_CH1
+        endif
+    config PKG_USING_LVGL
+            bool "Enable LVGL for LCD"
+            select BSP_USING_ONBOARD_LCD
+            default n
+    if PKG_USING_LVGL
+        config PKG_LVGL_USING_DEMOS
+            bool "Enable LVGL demo"
+            default n
+    endif
+
+endmenu
+
+menu "On-chip Peripheral Drivers"
+
+    config BSP_USING_GPIO
+        bool "Enable GPIO"
+        select RT_USING_PIN
+        default y
+
+    menuconfig BSP_USING_UART
+        bool "Enable UART"
+        default y
+        select RT_USING_SERIAL
+        if BSP_USING_UART
+            config BSP_USING_UART1
+                bool "Enable UART1"
+                default y
+            config BSP_UART1_RX_USING_DMA
+                bool "Enable UART1 RX DMA"
+                depends on BSP_USING_UART1 && RT_SERIAL_USING_DMA
+                default n
+			config BSP_UART1_TX_USING_DMA
+                bool "Enable UART1 TX DMA"
+                depends on BSP_USING_UART1 && RT_SERIAL_USING_DMA
+                default n
+        endif
+		
+	menuconfig BSP_USING_TIM
+        bool "Enable timer"
+        default n
+        select RT_USING_HWTIMER
+        if BSP_USING_TIM
+            config BSP_USING_TIM11
+                bool "Enable TIM11"
+                default n
+
+            config BSP_USING_TIM13
+                bool "Enable TIM13"
+                default n
+
+            config BSP_USING_TIM14
+                bool "Enable TIM14"
+                default n
+        endif
+	
+	menuconfig BSP_USING_PWM
+        bool "Enable PWM"
+        default n
+        select RT_USING_PWM
+        if BSP_USING_PWM
+        menuconfig BSP_USING_PWM2
+            bool "Enable timer2 output PWM"
+            default n
+            if BSP_USING_PWM2
+                config BSP_USING_PWM2_CH4
+                    bool "Enable PWM2 channel4"
+                    default n
+            endif
+        menuconfig BSP_USING_PWM3
+            bool "Enable timer3 output PWM"
+            default n
+            if BSP_USING_PWM3
+                config BSP_USING_PWM3_CH2
+                    bool "Enable PWM3 channel2"
+                    default n
+            endif
+            if BSP_USING_PWM3
+                config BSP_USING_PWM3_CH4
+                    bool "Enable PWM3 channel4"
+                    default n
+            endif
+        menuconfig BSP_USING_PWM14
+            bool "Enable timer14 output PWM"
+            default n
+            if BSP_USING_PWM14
+                config BSP_USING_PWM14_CH1
+                    bool "Enable PWM14 channel1"
+                    default n
+            endif
+        endif
+	
+    config BSP_USING_EXT_FMC_IO
+        bool "SRAM used EXT_FMC_IO"
+        default n
+
+    config BSP_USING_FMC
+        bool "SRAM used FMC"
+        default n  
+    source "$RTT_DIR/../libraries/HAL_Drivers/Kconfig" 
+    
+endmenu
+
+menu "Board extended module Drivers"
+
+endmenu
+ 
+endmenu
