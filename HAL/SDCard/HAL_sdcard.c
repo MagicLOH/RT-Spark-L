@@ -17,8 +17,12 @@
 
 static char page_buf[LCD_MAX_NUM];
 
+rt_err_t SD_DirScan(const char *path)
+{
 
-rt_err_t SD_GetFileInfos(const char *path, NovelInfo_t *novel)
+}
+
+rt_err_t SD_GetFileInfos(const char *path)
 {
     int fd = open(path, O_RDONLY);
     if (fd < 0)
@@ -27,34 +31,26 @@ rt_err_t SD_GetFileInfos(const char *path, NovelInfo_t *novel)
         return -RT_ERROR;
     }
     LOG_I("sdcard open novel file successfully.");
-
+    
+    NovelInfo_t novel = {0};
     // record novel path
-    rt_strcpy(novel->path, path);
+    rt_strcpy(novel.path, path);
     // record novel name
     char *p = rt_strstr(path, ".txt");
     while (*p != '/') p--;
-    rt_strcpy(novel->name, p + 1);
+    rt_strcpy(novel.name, p + 1);
     // record novel size
     struct stat f_stat = {0};
     fstat(fd, &f_stat);
-    novel->size = f_stat.st_size;
+    novel.size = f_stat.st_size;
     // calculate novel pages
-    novel->pages = novel->size / LCD_MAX_NUM + 1;
+    novel.pages = novel.size / LCD_MAX_NUM + 1;
     // record origin offset
-    novel->offset = 0; // offset = pages * max_len
+    novel.offset = 0; // offset = pages * max_len
 
-//	ssize_t f_size = f_stat.st_size; // 获取文件总大小
-//	ssize_t s = 0;
-//	while (f_size != s)
-//	{
-//		s += read(fd, page_buf, sizeof(page_buf));
-//		if (s < 0)
-//		{
-//			LOG_E("sdcard read data failed!");
-//			return RT_ERROR;
-//		}
-//	}
-//	LOG_I("Novel file read done. s = %ld", s);
+    LOG_I("SD GOT INFO: PATH: %s | NAME: %s | SIZE:%ld | PAGES: %ld | OFFSET: %ld",
+          novel.path, novel.name, novel.size, novel.pages, novel.offset);
+
     close(fd);
     return RT_EOK;
 }

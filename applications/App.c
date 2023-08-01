@@ -12,16 +12,17 @@
 
 #include <rtdbg.h>
 
+#define NOVEL_PATH "/sdcard/1.txt"
 
 int App_Init(void)
 {
     rt_err_t err = RT_EOK;
-    NovelInfo_t novel = {0};
-    if (RT_EOK == SD_GetFileInfos("/sdcard/1.txt", &novel))
-    {
-        LOG_I("PATH: %s\tNAME: %s\tSIZE:%ld\tPAGES: %ld\tOFFSET: %ld",
-              novel.path, novel.name, novel.size, novel.pages, novel.offset);
-    }
+//    err = SD_GetFileInfos(NOVEL_PATH);
+//    if (RT_EOK != err)
+//    {
+//        LOG_E("SD GotInfos failed! err = %ld", rt_get_errno());
+//        return -err;
+//    }
 
 
     LOG_I("App_Init done.");

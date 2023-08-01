@@ -376,7 +376,7 @@ static void lcd_show_char(rt_uint16_t x, rt_uint16_t y, rt_uint8_t data, rt_uint
     }
 }
 
-
+#define LCD_STRING_BUF_LEN 128
 /**
  * display the string on the lcd.
  *
@@ -390,7 +390,7 @@ static void lcd_show_char(rt_uint16_t x, rt_uint16_t y, rt_uint8_t data, rt_uint
  */
 rt_err_t lcd_show_string(rt_uint16_t x, rt_uint16_t y, rt_uint32_t size, const char *fmt, ...)
 {
-#define LCD_STRING_BUF_LEN 128
+
 
     va_list args;
     rt_uint8_t buf[LCD_STRING_BUF_LEN] = {0};
@@ -470,3 +470,5 @@ rt_err_t lcd_show_image(rt_uint16_t x, rt_uint16_t y, rt_uint16_t length, rt_uin
 
     return RT_EOK;
 }
+
+

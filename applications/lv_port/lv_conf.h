@@ -13,6 +13,8 @@
 
 #include <rtconfig.h>
 
+#define LV_TXT_ENC LV_TXT_ENC_UTF8 /**< 使用utf-8*/
+
 #define LV_COLOR_DEPTH          16
 #define LV_USE_PERF_MONITOR     1
 #define MY_DISP_HOR_RES          240

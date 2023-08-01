@@ -7,6 +7,7 @@
 
 #include <rtdef.h>
 
+
 void lcd_draw_circle(rt_uint16_t x0, rt_uint16_t y0, rt_uint8_t r);
 void lcd_draw_line(rt_uint16_t x1, rt_uint16_t y1, rt_uint16_t x2, rt_uint16_t y2);
 void lcd_draw_rectangle(rt_uint16_t x1, rt_uint16_t y1, rt_uint16_t x2, rt_uint16_t y2);

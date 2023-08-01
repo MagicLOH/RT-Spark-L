@@ -1,7 +1,7 @@
-/**
- * <rt-spark> official develop board
- * Author: loh
- * Date: create on 2023-07-28
+/** \ | /
+ * - RT -     Thread Operating System
+ * / | \     4.1.1 build Jul 30 2023 20:00:00
+ * 2006 - 2023 Copyright by RT-Thread team
  */
 
 #include <rtthread.h>

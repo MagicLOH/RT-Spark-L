@@ -1,13 +1,8 @@
-//
-// Created by ds on 2023/7/27.
-//
-
 #include "HAL_button.h"
 #include "board.h"
 
 #define DBG_TAG "HAL_button"
 #define DBG_LVL DBG_LOG
-
 #include "rtdbg.h"
 
 #define EVENT_CB(ev)   if(handle->cb[ev])handle->cb[ev]((Button*)handle)

@@ -52,6 +52,9 @@ menu "Onboard Peripheral Drivers"
         config PKG_LVGL_USING_DEMOS
             bool "Enable LVGL demo"
             default n
+        config PKG_LVGL_USING_EXAMPLES
+            bool "Enable LVGL examples"
+            default n
     endif
 
     menuconfig BSP_USING_FS

@@ -11,12 +11,20 @@ typedef struct NovelInfo
 {
     char path[64];
     char name[32];
-    ssize_t size;
-    ssize_t pages;
-    ssize_t offset;
+    rt_off_t size;
+    rt_off_t pages;
+    rt_off_t offset;
 } NovelInfo_t;
+typedef struct Novel
+{
+    char path[32];
+    char name[16];
+    rt_off_t size;
+    rt_off_t current_page;
+    struct Novel *next;
+} Novel_t;
 
 void SD_Init(void);
-rt_err_t SD_GetFileInfos(const char *path, NovelInfo_t *novel);
+rt_err_t SD_GetFileInfos(const char *path);
 
 #endif //_HAL_SDCARD_H_
