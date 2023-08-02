@@ -19,7 +19,7 @@
 #define LV_USE_PERF_MONITOR     1
 #define MY_DISP_HOR_RES          240
 #define MY_DISP_VER_RES          240
-//#define LV_USE_LOG              1
+#define LV_USE_LOG              0
 
 #ifdef PKG_USING_LV_MUSIC_DEMO
 /* music player demo */
