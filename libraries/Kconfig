@@ -17,24 +17,23 @@ config SOC_STM32F407ZG
 
 menu "Onboard Peripheral Drivers"
 
-	config BSP_USING_SRAM
+	menuconfig BSP_USING_SRAM
         bool "Enable SRAM"
-        select BSP_USING_EXT_FMC_IO
-        select BSP_USING_FMC
         default n
-    if BSP_USING_SRAM
-        config BSP_USING_EXT_FMC_IO
-                bool "SRAM used EXT_FMC_IO"
-                default n
-
-        config BSP_USING_FMC
-                bool "SRAM used FMC"
-                default n
-    endif
+        if BSP_USING_SRAM
+            config BSP_USING_EXT_FMC_IO
+                    bool "SRAM used EXT_FMC_IO"
+                    default n
+            config BSP_USING_FMC
+                    bool "SRAM used FMC"
+                    default n
+        endif
 
     config BSP_USING_ONBOARD_LCD
         bool "Enable LCD(ST7787)"
         select BSP_USING_SRAM
+        select BSP_USING_EXT_FMC_IO
+        select BSP_USING_FMC
         default n
         if BSP_USING_ONBOARD_LCD
             config BSP_USING_ONBOARD_LCD_PWM_BL
@@ -62,7 +61,6 @@ menu "Onboard Peripheral Drivers"
         select RT_USING_DFS
         select RT_USING_DFS_ROMFS
         default n
-
         if BSP_USING_FS
             config BSP_USING_SDCARD_FATFS
                 bool "Enable SDCARD (FATFS)"
@@ -76,6 +74,20 @@ menu "Onboard Peripheral Drivers"
             endif
         endif
 
+    menuconfig BSP_USING_AUDIO
+        bool "Enable Audio Module"
+        select RT_USING_AUDIO
+        select BSP_USING_I2C
+        select BSP_USING_I2C2
+        default n
+        if BSP_USING_AUDIO
+            config BSP_USING_AUDIO_PLAY
+            bool "Enable Audio Play"
+            default y
+            config BSP_USING_AUDIO_RECORD
+            bool "Enable Audio Record"
+            default n
+        endif
 endmenu
 
 menu "On-chip Peripheral Drivers"
@@ -102,7 +114,61 @@ menu "On-chip Peripheral Drivers"
                 depends on BSP_USING_UART1 && RT_SERIAL_USING_DMA
                 default n
         endif
-		
+    menuconfig BSP_USING_I2C
+        bool "Enable I2C"
+        default n
+        if BSP_USING_I2C
+            menuconfig BSP_USING_I2C1
+                bool "Enable I2C1 BUS (software simulation)"
+                default n
+                select RT_USING_I2C
+                select RT_USING_I2C_BITOPS
+                select RT_USING_PIN
+                if BSP_USING_I2C1
+                    config BSP_I2C1_SCL_PIN
+                        int "i2c1 scl pin number"
+                        range 0 143
+                        default 24
+                    config BSP_I2C1_SDA_PIN
+                        int "I2C1 sda pin number"
+                        range 0 143
+                        default 25
+                endif
+
+            menuconfig BSP_USING_I2C2
+                bool "Enable I2C2 BUS for AP3216C/ICM20608/ES8388/ Onboard(software simulation)"
+                default n
+                select RT_USING_I2C
+                select RT_USING_I2C_BITOPS
+                select RT_USING_PIN
+                if BSP_USING_I2C2
+                    config BSP_I2C2_SCL_PIN
+                        int "i2c2 scl pin number, PF1"
+                        range 0 143
+                        default 81
+                    config BSP_I2C2_SDA_PIN
+                        int "I2C2 sda pin number, PF0"
+                        range 0 143
+                        default 80
+                endif
+
+            menuconfig BSP_USING_I2C3
+                bool "Enable I2C3 BUS for AHT21 Onboard(software simulation)"
+                default n
+                select RT_USING_I2C
+                select RT_USING_I2C_BITOPS
+                select RT_USING_PIN
+                if BSP_USING_I2C3
+                    config BSP_I2C3_SCL_PIN
+                        int "i2c3 scl pin number, PE0"
+                        range 0 143
+                        default 64
+                    config BSP_I2C3_SDA_PIN
+                        int "I2C3 sda pin number, PE1"
+                        range 0 143
+                        default 65
+                endif
+        endif
 	menuconfig BSP_USING_TIM
         bool "Enable timer"
         default n

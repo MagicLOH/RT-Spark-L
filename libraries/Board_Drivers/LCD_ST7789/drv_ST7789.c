@@ -14,10 +14,10 @@
 #include <rtdevice.h>
 #include <board.h>
 #include "string.h"
-#include "Drv_ST7789.h"
+#include "drv_ST7789.h"
 
 #define DRV_DEBUG
-#define LOG_TAG "Drv_ST7789"
+#define LOG_TAG "drv.ST7789"
 
 #include <drv_log.h>
 
@@ -1377,7 +1377,7 @@ int drv_lcd_init(void)
 
     lcd_clear(WHITE);
     LOG_I("drv_lcd_init done.");
-    return RT_EOK;
+//    return RT_EOK;
 }
 INIT_COMPONENT_EXPORT(drv_lcd_init);
 

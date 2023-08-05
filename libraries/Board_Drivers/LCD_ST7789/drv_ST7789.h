@@ -15,7 +15,7 @@
 #ifdef PKG_USING_QRCODE
 #include <qrcode.h>
 #endif
-
+//0000 0000 0000 0011 1111 1111 1111 1110
 #define LCD_BASE ((uint32_t)(0x68000000 | 0x0003FFFE)) // A18 link to DCX
 #define LCD ((LCD_CONTROLLER_TypeDef *)LCD_BASE)
 #define LCD_W 240
@@ -27,11 +27,11 @@ typedef struct
     uint16_t width;         //LCD 宽度
     uint16_t height;        //LCD 高度
     uint16_t id;            //LCD ID
-    uint8_t  dir;           //横屏还是竖屏控制：0，竖屏；1，横屏。
+    uint8_t dir;           //横屏还是竖屏控制：0，竖屏；1，横屏。
     uint16_t wramcmd;       //开始写gram指令
     uint16_t setxcmd;       //设置x坐标指令
     uint16_t setycmd;       //设置y坐标指令
-}_lcd_dev;
+} _lcd_dev;
 
 //LCD参数
 extern _lcd_dev lcddev; //管理LCD重要参数
@@ -42,7 +42,7 @@ typedef struct
     volatile uint8_t RESERVED;
     volatile uint8_t _u8_RAM;
     volatile uint16_t _u16_RAM;
-}LCD_CONTROLLER_TypeDef;
+} LCD_CONTROLLER_TypeDef;
 
 
 //POINT_COLOR

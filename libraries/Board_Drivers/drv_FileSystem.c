@@ -22,7 +22,7 @@
 #error "Please define DFS_FILESYSTEM_TYPES_MAX more than 4"
 #endif
 
-#define DBG_TAG "Drv_FileSystem"
+#define DBG_TAG "drv.FileSystem"
 #define DBG_LVL DBG_INFO
 
 #include <rtdbg.h>

@@ -1,8 +1,8 @@
 #include "HAL_lcd.h"
 
 #include <rtthread.h>
-#include "Drv_ST7789.h"
-#include "Drv_ST7789_Fonts.h"
+#include "drv_ST7789.h"
+#include "drv_ST7789_Fonts.h"
 
 #define LCD_CLEAR_SEND_NUMBER 5760
 extern rt_uint16_t BACK_COLOR, FORE_COLOR;

@@ -12,7 +12,7 @@ path =  [cwd]
 
 src += Glob('*.c')
 
-#add lcd driver
+#add lcd module
 if GetDepend(['BSP_USING_SRAM']):
     src += Glob('drv_sram.c')
     
@@ -22,6 +22,15 @@ if GetDepend(['BSP_USING_ONBOARD_LCD']):
     
 if GetDepend(['BSP_USING_FS']):
     src += Glob('Drv_FileSystem.c')
+
+#add audio module
+if GetDepend(['BSP_USING_AUDIO']):
+    src += Glob('Audio_ES8388/drv_es8388.c')
+    src += Glob('Audio_ES8388/drv_sound.c')
+    path += [cwd + '/Audio_ES8388']
+
+if GetDepend(['BSP_USING_AUDIO_RECORD']):
+    src += Glob('Audio_ES8388/drv_mic.c')
 
 CPPDEFINES = ['STM32F407xx']
 group = DefineGroup('Drivers', src, depend = [''], CPPPATH = path, CPPDEFINES = CPPDEFINES)

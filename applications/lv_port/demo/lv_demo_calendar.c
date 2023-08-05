@@ -1,6 +1,6 @@
 #include <lvgl.h>
 #include <board.h>
-#include <Drv_ST7789.h>
+#include <drv_ST7789.h>
 
 static void event_handler(lv_event_t * e)
 {

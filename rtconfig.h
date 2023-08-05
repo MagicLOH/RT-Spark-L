@@ -102,6 +102,8 @@
 #define RT_SERIAL_USING_DMA
 #define RT_SERIAL_RB_BUFSZ 64
 #define RT_USING_HWTIMER
+#define RT_USING_I2C
+#define RT_USING_I2C_BITOPS
 #define RT_USING_PIN
 #define RT_USING_PWM
 #define RT_USING_RTC
@@ -112,6 +114,10 @@
 #define RT_MMCSD_THREAD_PREORITY 22
 #define RT_MMCSD_MAX_PARTITION 16
 #define RT_SDIO_DEBUG
+#define RT_USING_AUDIO
+#define RT_AUDIO_REPLAY_MP_BLOCK_SIZE 4096
+#define RT_AUDIO_REPLAY_MP_BLOCK_COUNT 2
+#define RT_AUDIO_RECORD_PIPE_SIZE 2048
 
 /* Using USB */
 
@@ -167,12 +173,6 @@
 
 /* LVGL: powerful and easy-to-use embedded GUI library */
 
-#define PKG_USING_LVGL
-#define PKG_LVGL_THREAD_PRIO 20
-#define PKG_LVGL_THREAD_STACK_SIZE 4096
-#define PKG_LVGL_DISP_REFR_PERIOD 5
-#define PKG_LVGL_USING_V08035
-#define PKG_LVGL_VER_NUM 0x08035
 
 /* u8g2: a monochrome graphic library */
 
@@ -278,6 +278,10 @@
 #define BSP_USING_GPIO
 #define BSP_USING_UART
 #define BSP_USING_UART1
+#define BSP_USING_I2C
+#define BSP_USING_I2C2
+#define BSP_I2C2_SCL_PIN 81
+#define BSP_I2C2_SDA_PIN 80
 #define BSP_USING_PWM
 #define BSP_USING_PWM14
 #define BSP_USING_PWM14_CH1
