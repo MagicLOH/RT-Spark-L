@@ -99,6 +99,10 @@ static int es8388_set_adc_dac_volume(int mode, int volume, int dot)
     return res;
 }
 
+/**
+ * @brief mute volume to 0
+ * @param enable or disable
+ */
 void es8388_set_voice_mute(rt_bool_t enable)
 {
     rt_uint8_t reg = 0;
@@ -259,12 +263,13 @@ void es8388_volume_set(rt_uint8_t volume)
     uint32_t real_vol = 0;
     volume = 100 - volume;
     if (volume > 100)
+    {
         volume = 100;
-
+    }
     real_vol = 192 * volume / 100;
 
-    reg_write(ES8388_DACCONTROL4, (rt_uint8_t) real_vol);  // DAC L
-    reg_write(ES8388_DACCONTROL5, (rt_uint8_t) real_vol);  // DAC R
+    reg_write(ES8388_DACCONTROL4, (rt_uint8_t) real_vol);  // DAC L 左声道
+    reg_write(ES8388_DACCONTROL5, (rt_uint8_t) real_vol);  // DAC R 右声道
 }
 
 rt_uint8_t es8388_volume_get(void)
@@ -280,7 +285,9 @@ rt_uint8_t es8388_volume_get(void)
     {
         volume *= 3;
         if (volume == 99)
+        {
             volume = 100;
+        }
     }
 
     return volume;
@@ -302,7 +309,6 @@ void es8388_pa_power(rt_bool_t enable)
 
 void estest()
 {
-
     // reg_write(ES8388_DACCONTROL24, volume);
     reg_write(ES8388_ADCCONTROL1, 0x88);       /* R9,左右通道PGA增益设置 */
     reg_write(ES8388_ADCCONTROL2, 0x10);  // 使用板载麦克风
@@ -318,7 +324,5 @@ void estest()
 
     reg_write(ES8388_DACCONTROL24, 33); // LOUT1VOL balanced noise: 0x18
     reg_write(ES8388_DACCONTROL25, 33); // ROUT1VOL balanced noise: 0x18
-
-
 }
-MSH_CMD_EXPORT(estest, test mic loop)
+MSH_CMD_EXPORT(estest, test mic loop);

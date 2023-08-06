@@ -56,11 +56,10 @@ const uint16_t I2S_PSC_TBL[][5] = {
         {19200, 393, 2, 2,  0},   /* 192Khz采样率 */
 };
 
-
 static void I2S3_Init(void)
 {
+    /* MCK 系统时钟提供 */
     RCC_PeriphCLKInitTypeDef PeriphClkInitStruct;
-
     PeriphClkInitStruct.PeriphClockSelection |= RCC_PERIPHCLK_I2S;
     PeriphClkInitStruct.PLLI2S.PLLI2SN = 192;
     PeriphClkInitStruct.PLLI2S.PLLI2SR = 2;
@@ -68,23 +67,23 @@ static void I2S3_Init(void)
     {
         Error_Handler();
     }
+    /* config i2s */
     HAL_I2S_DeInit(&I2S3_Handler);
-
     I2S3_Handler.Instance = SPI3;
     I2S3_Handler.Init.Mode = I2S_MODE_MASTER_TX;
     I2S3_Handler.Init.Standard = I2S_STANDARD_PHILIPS;
     I2S3_Handler.Init.DataFormat = I2S_DATAFORMAT_16B;
     I2S3_Handler.Init.MCLKOutput = I2S_MCLKOUTPUT_ENABLE;
-    I2S3_Handler.Init.AudioFreq = I2S_AUDIOFREQ_44K;
+    I2S3_Handler.Init.AudioFreq = I2S_AUDIOFREQ_44K;                // 44KHz采样频率
     I2S3_Handler.Init.CPOL = I2S_CPOL_LOW;
     I2S3_Handler.Init.ClockSource = I2S_CLOCK_PLL;
-    I2S3_Handler.Init.FullDuplexMode = I2S_FULLDUPLEXMODE_ENABLE;
+    I2S3_Handler.Init.FullDuplexMode = I2S_FULLDUPLEXMODE_ENABLE;   // 全双工
     if (HAL_I2S_Init(&I2S3_Handler) != HAL_OK)
     {
         Error_Handler();
     }
 
-    SET_BIT(I2S3_Handler.Instance->CR2, SPI_CR2_TXDMAEN);
+    SET_BIT(I2S3_Handler.Instance->CR2, SPI_CR2_TXDMAEN); // enable SPI/I2S TX DMA request
     __HAL_I2S_ENABLE(&I2S3_Handler);
 
     /* Configure DMA used for I2S3 */
@@ -99,6 +98,8 @@ static void I2S3_Init(void)
     I2S3_TXDMA_Handler.Init.Mode = DMA_CIRCULAR;
     I2S3_TXDMA_Handler.Init.Priority = DMA_PRIORITY_HIGH;
     I2S3_TXDMA_Handler.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+    I2S3_TXDMA_Handler.Init.MemBurst = DMA_MBURST_SINGLE;                  /* 存储器单次突发传输 */
+    I2S3_TXDMA_Handler.Init.PeriphBurst = DMA_PBURST_SINGLE;               /* 外设突发单次传输 */
 
     __HAL_LINKDMA(&I2S3_Handler, hdmatx, I2S3_TXDMA_Handler);
     HAL_DMA_DeInit(&I2S3_TXDMA_Handler);
@@ -457,16 +458,15 @@ static void sound_buffer_info(struct rt_audio_device *audio, struct rt_audio_buf
     info->block_count = 2;
 }
 
-static struct rt_audio_ops snd_ops =
-        {
-                .getcaps     = sound_getcaps,
-                .configure   = sound_configure,
-                .init        = sound_init,
-                .start       = sound_start,
-                .stop        = sound_stop,
-                .transmit    = RT_NULL,
-                .buffer_info = sound_buffer_info,
-        };
+static struct rt_audio_ops snd_ops = {
+        .getcaps     = sound_getcaps,
+        .configure   = sound_configure,
+        .init        = sound_init,
+        .start       = sound_start,
+        .stop        = sound_stop,
+        .transmit    = RT_NULL,
+        .buffer_info = sound_buffer_info,
+};
 
 int rt_hw_sound_init(void)
 {
@@ -493,6 +493,7 @@ int rt_hw_sound_init(void)
     snd_dev.audio.ops = &snd_ops;
     rt_audio_register(&snd_dev.audio, "sound0", RT_DEVICE_FLAG_WRONLY, &snd_dev);
 
+    LOG_I("sound0 device register done.");
     return RT_EOK;
 }
-// INIT_DEVICE_EXPORT(rt_hw_sound_init);
+INIT_DEVICE_EXPORT(rt_hw_sound_init);
