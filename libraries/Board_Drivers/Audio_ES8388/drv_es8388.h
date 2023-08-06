@@ -10,6 +10,19 @@
 #ifndef __DRV_ES8388_H__
 #define __DRV_ES8388_H__
 
+#include "stm32f4xx_hal.h"
+
+#define I2S_LRCK_GPIO_PORT  GPIOA
+#define I2S_LRCK_GPIO_PIN   GPIO_PIN_15
+#define I2S_SCLK_GPIO_PORT  GPIOB
+#define I2S_SCLK_GPIO_PIN   GPIO_PIN_3
+#define I2S_SDOUT_GPIO_PORT GPIOB
+#define I2S_SDOUT_GPIO_PIN  GPIO_PIN_5
+#define I2S_SDIN_GPIO_PORT  GPIOB
+#define I2S_SDIN_GPIO_PIN   GPIO_PIN_4
+#define I2S_MCLK_GPIO_PORT  GPIOC
+#define I2S_MCLK_GPIO_PIN   GPIO_PIN_7
+
 /* ES8388 register space */
 #define ES8388_CONTROL1         0x00
 #define ES8388_CONTROL2         0x01
@@ -68,20 +81,20 @@
 
 enum es8388_mode
 {
-    ES_MODE_NONE    = 0x00,
-    ES_MODE_DAC     = 0x01,
-    ES_MODE_ADC     = 0x02,
+    ES_MODE_NONE = 0x00,
+    ES_MODE_DAC = 0x01,
+    ES_MODE_ADC = 0x02,
     ES_MODE_DAC_ADC = 0x03,
-    ES_MODE_LINE    = 0x04,
-    ES_MODE_MAX     = 0x06,
+    ES_MODE_LINE = 0x04,
+    ES_MODE_MAX = 0x06,
 };
 
 enum es8388_format
 {
     ES_FMT_NORMAL = 0,
-    ES_FMT_LEFT   = 1,
-    ES_FMT_RIGHT  = 2,
-    ES_FMT_DSP    = 3,
+    ES_FMT_LEFT = 1,
+    ES_FMT_RIGHT = 2,
+    ES_FMT_DSP = 3,
 };
 
 rt_err_t es8388_init(const char *i2c_name, rt_uint16_t pin);

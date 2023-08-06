@@ -78,11 +78,10 @@ static void I2S3_Init(void)
     I2S3_Handler.Init.CPOL = I2S_CPOL_LOW;
     I2S3_Handler.Init.ClockSource = I2S_CLOCK_PLL;
     I2S3_Handler.Init.FullDuplexMode = I2S_FULLDUPLEXMODE_ENABLE;   // 全双工
-    if (HAL_I2S_Init(&I2S3_Handler) != HAL_OK)
+    if (HAL_I2S_Init(&I2S3_Handler) != HAL_OK) // HAL 底层驱动初始化
     {
         Error_Handler();
     }
-
     SET_BIT(I2S3_Handler.Instance->CR2, SPI_CR2_TXDMAEN); // enable SPI/I2S TX DMA request
     __HAL_I2S_ENABLE(&I2S3_Handler);
 
@@ -114,12 +113,46 @@ static void I2S3_Init(void)
     HAL_NVIC_EnableIRQ(DMA1_Stream7_IRQn);
 }
 
+/**
+ * @brief 底层驱动 会被HAL_I2S_Init()调用
+ * @param hi2s
+ */
+void HAL_I2S_MspInit(I2S_HandleTypeDef *hi2s)
+{
+    GPIO_InitTypeDef gpio_init_struct;
+
+    __HAL_RCC_SPI2_CLK_ENABLE();    /* Enable SPI2/I2S2 clock */
+    __HAL_RCC_GPIOC_CLK_ENABLE();   /* MCk */
+    __HAL_RCC_GPIOB_CLK_ENABLE();   /* SCK, SD, ext_SD */
+    __HAL_RCC_GPIOA_CLK_ENABLE();   /* WS */
+
+    gpio_init_struct.Pin = I2S_LRCK_GPIO_PIN;
+    gpio_init_struct.Mode = GPIO_MODE_AF_PP;                /* 推挽复用 */
+    gpio_init_struct.Pull = GPIO_PULLUP;                    /* 上拉 */
+    gpio_init_struct.Speed = GPIO_SPEED_HIGH;               /* 高速 */
+    gpio_init_struct.Alternate = GPIO_AF5_SPI2;             /* 复用为SPI/I2S */
+    HAL_GPIO_Init(I2S_LRCK_GPIO_PORT, &gpio_init_struct);   /* 初始化I2S_LRCK引脚 */
+
+    gpio_init_struct.Pin = I2S_SCLK_GPIO_PIN;
+    HAL_GPIO_Init(I2S_SCLK_GPIO_PORT, &gpio_init_struct);    /* 初始化I2S_SCLK引脚 */
+
+    gpio_init_struct.Pin = I2S_SDOUT_GPIO_PIN;
+    HAL_GPIO_Init(I2S_SDOUT_GPIO_PORT, &gpio_init_struct);   /* 初始化I2S_SDOUT引脚 */
+
+    gpio_init_struct.Pin = I2S_SDIN_GPIO_PIN;
+    HAL_GPIO_Init(I2S_SDIN_GPIO_PORT, &gpio_init_struct);    /* 初始化I2S_SDIN引脚 */
+
+    gpio_init_struct.Pin = I2S_MCLK_GPIO_PIN;
+    HAL_GPIO_Init(I2S_MCLK_GPIO_PORT, &gpio_init_struct);    /* 初始化I2S_MCLK引脚 */
+}
+/**
+ * @brief 传输完成中断
+ */
 void DMA1_Stream7_IRQHandler(void)
 {
     rt_audio_tx_complete(&snd_dev.audio);
     HAL_DMA_IRQHandler(&I2S3_TXDMA_Handler);
 }
-
 
 //void HAL_SAI_TxHalfCpltCallback(SAI_HandleTypeDef *hsai)
 //{
