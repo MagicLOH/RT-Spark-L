@@ -294,6 +294,7 @@
 #define BSP_USING_ONBOARD_LCD_PWM_BL
 #define BSP_USING_FS
 #define BSP_USING_SDCARD_FATFS
+#define BSP_USING_NES
 
 /* On-chip Peripheral Drivers */
 

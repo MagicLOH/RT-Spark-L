@@ -140,10 +140,10 @@ static int g_callbackIndex = 0;
 
 static void AudioCallback(void *userdata, uint8_t *stream, int len)
 {
-	int16_t *source = (int16_t *) stream;
+	int16_t *source = (int16_t *)stream;
 	int count = len / 2;
 	double r = 0.0;
-	int startIndex = (g_callbackIndex * count) % (int) (FREQ / SoundFreq * 10);
+	int startIndex = (g_callbackIndex * count) % (int)(FREQ / SoundFreq * 10);
 	for (int i = 0; i < count; ++i)
 	{
 		r = M_PI * 2.0 * SoundFreq * TimeLag * (startIndex + i);
@@ -181,7 +181,7 @@ void nes_frame(nes_t *nes)
 
 static void nes_thread_entry(void *parameter)
 {
-	nes_t *nes = (nes_t *) parameter;
+	nes_t *nes = (nes_t *)parameter;
 	nes_run(nes);
 	nes_unload_file(nes);
 }

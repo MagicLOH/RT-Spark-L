@@ -12,10 +12,11 @@
 
 #include <rtdbg.h>
 
+
 int App_Init(void)
 {
 	rt_err_t err = RT_EOK;
-
+	
 
 	LOG_I("App_Init done.");
 	return err;
