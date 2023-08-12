@@ -12,19 +12,11 @@
 
 #include <rtdbg.h>
 
-#define NOVEL_PATH "/sdcard/1.txt"
-
 int App_Init(void)
 {
-    rt_err_t err = RT_EOK;
-//    err = SD_GetFileInfos(NOVEL_PATH);
-//    if (RT_EOK != err)
-//    {
-//        LOG_E("SD GotInfos failed! err = %ld", rt_get_errno());
-//        return -err;
-//    }
+	rt_err_t err = RT_EOK;
 
 
-    LOG_I("App_Init done.");
-    return err;
+	LOG_I("App_Init done.");
+	return err;
 }

@@ -16,11 +16,10 @@
 #define RT_HOOK_USING_FUNC_PTR
 #define RT_USING_IDLE_HOOK
 #define RT_IDLE_HOOK_LIST_SIZE 4
-#define IDLE_THREAD_STACK_SIZE 256
+#define IDLE_THREAD_STACK_SIZE 1024
 
 /* kservice optimization */
 
-#define RT_KSERVICE_USING_STDLIB
 #define RT_DEBUG
 #define RT_DEBUG_COLOR
 
@@ -57,7 +56,6 @@
 #define RT_USING_USER_MAIN
 #define RT_MAIN_THREAD_STACK_SIZE 2048
 #define RT_MAIN_THREAD_PRIORITY 10
-#define RT_USING_LEGACY
 #define RT_USING_MSH
 #define RT_USING_FINSH
 #define FINSH_USING_MSH
@@ -92,11 +90,15 @@
 #define RT_DFS_ELM_MAX_SECTOR_SIZE 512
 #define RT_DFS_ELM_REENTRANT
 #define RT_DFS_ELM_MUTEX_TIMEOUT 3000
+#define RT_USING_DFS_DEVFS
 #define RT_USING_DFS_ROMFS
 
 /* Device Drivers */
 
 #define RT_USING_DEVICE_IPC
+#define RT_USING_SYSTEM_WORKQUEUE
+#define RT_SYSTEM_WORKQUEUE_STACKSIZE 2048
+#define RT_SYSTEM_WORKQUEUE_PRIORITY 23
 #define RT_USING_SERIAL
 #define RT_USING_SERIAL_V1
 #define RT_SERIAL_USING_DMA
@@ -114,10 +116,6 @@
 #define RT_MMCSD_THREAD_PREORITY 22
 #define RT_MMCSD_MAX_PARTITION 16
 #define RT_SDIO_DEBUG
-#define RT_USING_AUDIO
-#define RT_AUDIO_REPLAY_MP_BLOCK_SIZE 4096
-#define RT_AUDIO_REPLAY_MP_BLOCK_COUNT 2
-#define RT_AUDIO_RECORD_PIPE_SIZE 2048
 
 /* Using USB */
 
@@ -128,6 +126,16 @@
 
 /* POSIX (Portable Operating System Interface) layer */
 
+#define RT_USING_POSIX_FS
+#define RT_USING_POSIX_DEVIO
+#define RT_USING_POSIX_STDIO
+#define RT_USING_POSIX_POLL
+#define RT_USING_POSIX_SELECT
+#define RT_USING_POSIX_SOCKET
+#define RT_USING_POSIX_DELAY
+#define RT_USING_POSIX_CLOCK
+#define RT_USING_PTHREADS
+#define PTHREAD_NUM_MAX 8
 
 /* Interprocess Communication (IPC) */
 
@@ -135,9 +143,23 @@
 /* Socket is in the 'Network' category */
 
 #define RT_USING_CPLUSPLUS
+#define RT_USING_CPLUSPLUS11
 
 /* Network */
 
+#define RT_USING_SAL
+#define SAL_INTERNET_CHECK
+
+/* Docking with protocol stacks */
+
+#define SAL_USING_POSIX
+#define RT_USING_NETDEV
+#define NETDEV_USING_IFCONFIG
+#define NETDEV_USING_PING
+#define NETDEV_USING_NETSTAT
+#define NETDEV_USING_AUTO_DEFAULT
+#define NETDEV_IPV4 1
+#define NETDEV_IPV6 0
 
 /* Utilities */
 
@@ -272,18 +294,12 @@
 #define BSP_USING_ONBOARD_LCD_PWM_BL
 #define BSP_USING_FS
 #define BSP_USING_SDCARD_FATFS
-#define BSP_USING_AUDIO
-#define BSP_USING_AUDIO_PLAY
 
 /* On-chip Peripheral Drivers */
 
 #define BSP_USING_GPIO
 #define BSP_USING_UART
 #define BSP_USING_UART1
-#define BSP_USING_I2C
-#define BSP_USING_I2C2
-#define BSP_I2C2_SCL_PIN 81
-#define BSP_I2C2_SDA_PIN 80
 #define BSP_USING_PWM
 #define BSP_USING_PWM14
 #define BSP_USING_PWM14_CH1

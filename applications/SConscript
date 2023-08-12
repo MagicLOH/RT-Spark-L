@@ -14,6 +14,10 @@ src += Glob('Pages/StatusBar/*.cpp')
 src += Glob('Pages/SystemInfos/*.cpp')
 src += Glob('Pages/Novel/*.cpp')
 
+LOCAL_CFLAGS = ''
+if rtconfig.PLATFORM in ['armcc']:
+    LOCAL_CFLAGS += ' --gnu'
+
 group = DefineGroup('Applications', src, depend = [''], CPPPATH = CPPPATH)
 
 list = os.listdir(cwd)

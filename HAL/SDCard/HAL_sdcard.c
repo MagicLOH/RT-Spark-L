@@ -22,51 +22,58 @@ rt_err_t SD_DirScan(const char *path)
 
 }
 
-rt_err_t SD_GetFileInfos(const char *path)
+rt_err_t SD_GetFileInfos(int argc, char *argv[])
 {
-    int fd = open(path, O_RDONLY);
-    if (fd < 0)
-    {
-        rt_kprintf("sdcard open novel file failed!");
-        return -RT_ERROR;
-    }
-    LOG_I("sdcard open novel file successfully.");
-    
-    NovelInfo_t novel = {0};
-    // record novel path
-    rt_strcpy(novel.path, path);
-    // record novel name
-    char *p = rt_strstr(path, ".txt");
-    while (*p != '/') p--;
-    rt_strcpy(novel.name, p + 1);
-    // record novel size
-    struct stat f_stat = {0};
-    fstat(fd, &f_stat);
-    novel.size = f_stat.st_size;
-    // calculate novel pages
-    novel.pages = novel.size / LCD_MAX_NUM + 1;
-    // record origin offset
-    novel.offset = 0; // offset = pages * max_len
+	if (argc != 2)
+	{
+		LOG_E("Usage: %s [path/filename]", argv[0]);
+		return RT_ERROR;
+	}
 
-    LOG_I("SD GOT INFO: PATH: %s | NAME: %s | SIZE:%ld | PAGES: %ld | OFFSET: %ld",
-          novel.path, novel.name, novel.size, novel.pages, novel.offset);
+	int fd = open(argv[1], O_RDONLY);
+	if (fd < 0)
+	{
+		rt_kprintf("sdcard open novel file failed!\n");
+		return -RT_ERROR;
+	}
+	LOG_I("sdcard open novel file successfully.");
 
-    close(fd);
-    return RT_EOK;
+	NovelInfo_t novel = {0};
+	// record novel path
+	rt_strcpy(novel.path, argv[1]);
+	// record novel name
+	char *p = rt_strstr(argv[1], ".");
+	while (*p != '/') p--;
+	rt_strcpy(novel.name, p + 1);
+	// record novel size
+	struct stat f_stat = {0};
+	fstat(fd, &f_stat);
+	novel.size = f_stat.st_size;
+	// calculate novel pages
+	novel.pages = novel.size / LCD_MAX_NUM + 1;
+	// record origin offset
+	novel.offset = 0; // offset = pages * max_len
+
+	LOG_I("SD GOT INFO: PATH: %s | NAME: %s | SIZE:%ld | PAGES: %ld | OFFSET: %ld",
+		  novel.path, novel.name, novel.size, novel.pages, novel.offset);
+
+	close(fd);
+	return RT_EOK;
 }
+MSH_CMD_EXPORT(SD_GetFileInfos, sd_print_infos);
 
 void SD_Init(void)
 {
-    LOG_I("Waiting for fs mount ok.");
-    rt_thread_mdelay(1000);
+	LOG_I("Waiting for fs mount ok.");
+	rt_thread_mdelay(500);
 
-    if (dfs_mount("sd0", "/sdcard", "elm", 0, 0) == RT_EOK)
-    {
-        LOG_I("SD card mount to '/sdcard'");
-    }
-    else
-    {
-        LOG_E("SD card mount to '/sdcard' failed!");
-        return;
-    }
+	if (dfs_mount("sd0", "/sdcard", "elm", 0, 0) == RT_EOK)
+	{
+		LOG_I("SD card mount to '/sdcard'");
+	}
+	else
+	{
+		LOG_E("SD card mount to '/sdcard' failed!");
+		return;
+	}
 }

@@ -10,6 +10,6 @@
 #include "HAL_rtc.h"
 #include "HAL_sdcard.h"
 
-int HAL_In1t(void);
+int myHAL_Init(void);
 
 #endif //_HAL_H_

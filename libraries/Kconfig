@@ -88,6 +88,10 @@ menu "Onboard Peripheral Drivers"
             bool "Enable Audio Record"
             default n
         endif
+
+    config BSP_USING_NES
+        bool "Enable Nes Simulator"
+        default n
 endmenu
 
 menu "On-chip Peripheral Drivers"
@@ -114,6 +118,7 @@ menu "On-chip Peripheral Drivers"
                 depends on BSP_USING_UART1 && RT_SERIAL_USING_DMA
                 default n
         endif
+
     menuconfig BSP_USING_I2C
         bool "Enable I2C"
         default n
@@ -169,6 +174,7 @@ menu "On-chip Peripheral Drivers"
                         default 65
                 endif
         endif
+
 	menuconfig BSP_USING_TIM
         bool "Enable timer"
         default n
