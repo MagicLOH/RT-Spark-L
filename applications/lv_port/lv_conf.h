@@ -17,9 +17,11 @@
 
 #define LV_COLOR_DEPTH          16
 #define LV_USE_PERF_MONITOR     1
-#define MY_DISP_HOR_RES          240
-#define MY_DISP_VER_RES          240
+#define MY_DISP_HOR_RES         240
+#define MY_DISP_VER_RES         240
 #define LV_USE_LOG              0
+
+#define LV_FONT_MONTSERRAT_20 1
 
 #ifdef PKG_USING_LV_MUSIC_DEMO
 /* music player demo */
@@ -34,7 +36,7 @@
 #endif
 
 
-#define LV_USE_DEMO_BENCHMARK       1
+//#define LV_USE_DEMO_BENCHMARK       1
 
 
 //#define LV_USE_DEMO_WIDGETS         1

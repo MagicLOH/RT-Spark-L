@@ -10,9 +10,14 @@
 
 #define DBG_TAG "HAL_rtc"
 #define DBG_LVL DBG_LOG
-
 #include <rtdbg.h>
 
+#include "Config.h"
+
+void RTC_Update(void)
+{
+	
+}
 
 void RTC_Init(void)
 {

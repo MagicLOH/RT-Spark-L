@@ -122,15 +122,24 @@ SECTIONS
     } > RAM1
     __bss_end = .;
 
-    .NESccm (NOLOAD)  : ALIGN(4)
+    .LVGLccm (NOLOAD)  : ALIGN(4)
     {
         . = ALIGN(4);
-        *(.NESccm)
-        *(.NESccm.*)
+        *(.LVGLccm)
+        *(.LVGLccm.*)
         . = ALIGN(4);
-        __NESccm_free__ = .;
+        __LVGLccm_free__ = .;
     } > RAM2
 
+/*    .NESccm (NOLOAD)  : ALIGN(4)*/
+/*    {*/
+/*        . = ALIGN(4);*/
+/*        *(.NESccm)*/
+/*        *(.NESccm.*)*/
+/*        . = ALIGN(4);*/
+/*        __NESccm_free__ = .;*/
+/*    } > RAM2*/
+/**/
     .MCUlcdgrambysram (NOLOAD) : ALIGN(4)
     {
         . = ALIGN(4);

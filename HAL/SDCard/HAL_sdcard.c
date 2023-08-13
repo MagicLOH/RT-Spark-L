@@ -1,16 +1,9 @@
-//
-// Created by ds on 2023/7/27.
-//
-
 #include "HAL_sdcard.h"
 
 #include <rtthread.h>
 
-//#include <drv_lcd.h>
-
 #define DBG_TAG "HAL_sdcard"
 #define DBG_LVL DBG_LOG
-
 #include <rtdbg.h>
 
 #define LCD_MAX_NUM (32)
@@ -62,11 +55,12 @@ rt_err_t SD_GetFileInfos(int argc, char *argv[])
 }
 MSH_CMD_EXPORT(SD_GetFileInfos, sd_print_infos);
 
+/**
+ * @brief: manually mount sdcard on file system
+ */
 void SD_Init(void)
 {
-	LOG_I("Waiting for fs mount ok.");
-	rt_thread_mdelay(500);
-
+//	rt_thread_delay(100);
 	if (dfs_mount("sd0", "/sdcard", "elm", 0, 0) == RT_EOK)
 	{
 		LOG_I("SD card mount to '/sdcard'");

@@ -12,6 +12,10 @@ path =  [cwd]
 
 src += Glob('*.c')
 
+#add MultiButton lib
+src += Glob('MultiButton/MultiButton.c')
+path += [cwd + '/MultiButton']
+
 #add lcd module
 if GetDepend(['BSP_USING_SRAM']):
     src += Glob('drv_sram.c')

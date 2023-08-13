@@ -3,22 +3,17 @@ import os
 
 cwd     = GetCurrentDir()
 CPPPATH = [cwd]
-CPPPATH += [cwd + '/Pages/Novel']
-CPPPATH += [cwd + '/Pages/StartUp']
-CPPPATH += [cwd + '/Pages/StatusBar']
-CPPPATH += [cwd + '/Pages/SystemInfos']
+CPPPATH += [cwd + '/Config']
 
 src = Glob('*.c')
-src += Glob('Pages/StartUp/*.cpp')
-src += Glob('Pages/StatusBar/*.cpp')
-src += Glob('Pages/SystemInfos/*.cpp')
-src += Glob('Pages/Novel/*.cpp')
+src += Glob('*.cpp')
+
 
 LOCAL_CFLAGS = ''
 if rtconfig.PLATFORM in ['armcc']:
     LOCAL_CFLAGS += ' --gnu'
 
-group = DefineGroup('Applications', src, depend = [''], CPPPATH = CPPPATH)
+group = DefineGroup('Applications', src, depend = [''], CPPPATH = CPPPATH, LOCAL_CFLAGS = LOCAL_CFLAGS)
 
 list = os.listdir(cwd)
 for item in list:

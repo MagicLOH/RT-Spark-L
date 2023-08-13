@@ -7,6 +7,7 @@
 
 #include <rtdef.h>
 
+void RTC_Update(void);
 void RTC_Init(void);
 
 #endif //_HAL_RTC_H_

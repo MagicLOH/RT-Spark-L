@@ -129,9 +129,6 @@
 #define RT_USING_POSIX_FS
 #define RT_USING_POSIX_DEVIO
 #define RT_USING_POSIX_STDIO
-#define RT_USING_POSIX_POLL
-#define RT_USING_POSIX_SELECT
-#define RT_USING_POSIX_SOCKET
 #define RT_USING_POSIX_DELAY
 #define RT_USING_POSIX_CLOCK
 #define RT_USING_PTHREADS
@@ -147,19 +144,6 @@
 
 /* Network */
 
-#define RT_USING_SAL
-#define SAL_INTERNET_CHECK
-
-/* Docking with protocol stacks */
-
-#define SAL_USING_POSIX
-#define RT_USING_NETDEV
-#define NETDEV_USING_IFCONFIG
-#define NETDEV_USING_PING
-#define NETDEV_USING_NETSTAT
-#define NETDEV_USING_AUTO_DEFAULT
-#define NETDEV_IPV4 1
-#define NETDEV_IPV6 0
 
 /* Utilities */
 
@@ -195,6 +179,12 @@
 
 /* LVGL: powerful and easy-to-use embedded GUI library */
 
+#define PKG_USING_LVGL
+#define PKG_LVGL_THREAD_PRIO 20
+#define PKG_LVGL_THREAD_STACK_SIZE 4096
+#define PKG_LVGL_DISP_REFR_PERIOD 5
+#define PKG_LVGL_USING_V08038
+#define PKG_LVGL_VER_NUM 0x08038
 
 /* u8g2: a monochrome graphic library */
 
