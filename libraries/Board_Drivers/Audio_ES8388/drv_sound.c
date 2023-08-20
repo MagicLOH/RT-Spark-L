@@ -20,10 +20,10 @@
 
 struct sound_device
 {
-	struct rt_audio_device audio;
-	struct rt_audio_configure replay_config;
-	rt_uint8_t *tx_fifo;
-	rt_uint8_t volume;
+    struct rt_audio_device audio;
+    struct rt_audio_configure replay_config;
+    rt_uint8_t *tx_fifo;
+    rt_uint8_t volume;
 };
 
 static struct sound_device snd_dev = {0};
@@ -43,115 +43,119 @@ static DMA_HandleTypeDef I2S3_TXDMA_Handler = {0};
  * 表格式:采样率/10,PLLI2SN,PLLI2SR,I2SDIV,ODD
  */
 const uint16_t I2S_PSC_TBL[][5] = {
-	{800,   256, 5, 12, 1},   /* 8Khz采样率 */
-	{1102,  429, 4, 19, 0},   /* 11.025Khz采样率 */
-	{1600,  213, 2, 13, 0},   /* 16Khz采样率 */
-	{2205,  429, 4, 9,  1},   /* 22.05Khz采样率 */
-	{3200,  213, 2, 6,  1},   /* 32Khz采样率 */
-	{4410,  271, 2, 6,  0},   /* 44.1Khz采样率 */
-	{4800,  258, 3, 3,  1},   /* 48Khz采样率 */
-	{8820,  316, 2, 3,  1},   /* 88.2Khz采样率 */
-	{9600,  344, 2, 3,  1},   /* 96Khz采样率 */
-	{17640, 361, 2, 2,  0},   /* 176.4Khz采样率 */
-	{19200, 393, 2, 2,  0},   /* 192Khz采样率 */
+    {800,   256, 5, 12, 1},   /* 8Khz采样率 */
+    {1102,  429, 4, 19, 0},   /* 11.025Khz采样率 */
+    {1600,  213, 2, 13, 0},   /* 16Khz采样率 */
+    {2205,  429, 4, 9,  1},   /* 22.05Khz采样率 */
+    {3200,  213, 2, 6,  1},   /* 32Khz采样率 */
+    {4410,  271, 2, 6,  0},   /* 44.1Khz采样率 */
+    {4800,  258, 3, 3,  1},   /* 48Khz采样率 */
+    {8820,  316, 2, 3,  1},   /* 88.2Khz采样率 */
+    {9600,  344, 2, 3,  1},   /* 96Khz采样率 */
+    {17640, 361, 2, 2,  0},   /* 176.4Khz采样率 */
+    {19200, 393, 2, 2,  0},   /* 192Khz采样率 */
 };
 
 static void I2S3_Init(void)
 {
-	/* MCK 系统时钟提供 */
-	RCC_PeriphCLKInitTypeDef PeriphClkInitStruct;
-	PeriphClkInitStruct.PeriphClockSelection |= RCC_PERIPHCLK_I2S;
-	PeriphClkInitStruct.PLLI2S.PLLI2SN = 192;
-	PeriphClkInitStruct.PLLI2S.PLLI2SR = 2;
-	if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
-	{
-		Error_Handler();
-	}
-	/* config i2s */
-	HAL_I2S_DeInit(&I2S3_Handler);
-	I2S3_Handler.Instance = SPI3;
-	I2S3_Handler.Init.Mode = I2S_MODE_MASTER_TX;
-	I2S3_Handler.Init.Standard = I2S_STANDARD_PHILIPS;
-	I2S3_Handler.Init.DataFormat = I2S_DATAFORMAT_16B;
-	I2S3_Handler.Init.MCLKOutput = I2S_MCLKOUTPUT_ENABLE;
-	I2S3_Handler.Init.AudioFreq = I2S_AUDIOFREQ_44K;                // 44KHz采样频率
-	I2S3_Handler.Init.CPOL = I2S_CPOL_LOW;
-	I2S3_Handler.Init.ClockSource = I2S_CLOCK_PLL;
-	I2S3_Handler.Init.FullDuplexMode = I2S_FULLDUPLEXMODE_ENABLE;   // 全双工
-	if (HAL_I2S_Init(&I2S3_Handler) != HAL_OK) // HAL 底层驱动初始化
-	{
-		Error_Handler();
-	}
-	SET_BIT(I2S3_Handler.Instance->CR2, SPI_CR2_TXDMAEN); // enable SPI/I2S TX DMA request
-	__HAL_I2S_ENABLE(&I2S3_Handler);
+    /* MCK 系统时钟提供 */
+    RCC_PeriphCLKInitTypeDef PeriphClkInitStruct;
+    PeriphClkInitStruct.PeriphClockSelection |= RCC_PERIPHCLK_I2S;
+    PeriphClkInitStruct.PLLI2S.PLLI2SN = 192;
+    PeriphClkInitStruct.PLLI2S.PLLI2SR = 2;
+    if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
+    {
+        Error_Handler();
+    }
+    /* config i2s */
+    HAL_I2S_DeInit(&I2S3_Handler);
+    I2S3_Handler.Instance = SPI3;
+    I2S3_Handler.Init.Mode = I2S_MODE_MASTER_TX;
+    I2S3_Handler.Init.Standard = I2S_STANDARD_PHILIPS;
+    I2S3_Handler.Init.DataFormat = I2S_DATAFORMAT_16B;
+    I2S3_Handler.Init.MCLKOutput = I2S_MCLKOUTPUT_ENABLE;
+    I2S3_Handler.Init.AudioFreq = I2S_AUDIOFREQ_44K;                // 44KHz采样频率
+    I2S3_Handler.Init.CPOL = I2S_CPOL_LOW;
+    I2S3_Handler.Init.ClockSource = I2S_CLOCK_PLL;
+    I2S3_Handler.Init.FullDuplexMode = I2S_FULLDUPLEXMODE_ENABLE;   // 全双工
+    if (HAL_I2S_Init(&I2S3_Handler) != HAL_OK) // HAL 底层驱动初始化
+    {
+        Error_Handler();
+    }
+    SET_BIT(I2S3_Handler.Instance->CR2, SPI_CR2_TXDMAEN); // enable SPI/I2S TX DMA request
+    __HAL_I2S_ENABLE(&I2S3_Handler);
 
-	/* Configure DMA used for I2S3 */
-	__HAL_RCC_DMA1_CLK_ENABLE();
-	I2S3_TXDMA_Handler.Instance = DMA1_Stream7;
-	I2S3_TXDMA_Handler.Init.Channel = DMA_CHANNEL_0;
-	I2S3_TXDMA_Handler.Init.Direction = DMA_MEMORY_TO_PERIPH;
-	I2S3_TXDMA_Handler.Init.PeriphInc = DMA_PINC_DISABLE;
-	I2S3_TXDMA_Handler.Init.MemInc = DMA_MINC_ENABLE;
-	I2S3_TXDMA_Handler.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
-	I2S3_TXDMA_Handler.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
-	I2S3_TXDMA_Handler.Init.Mode = DMA_CIRCULAR;
-	I2S3_TXDMA_Handler.Init.Priority = DMA_PRIORITY_HIGH;
-	I2S3_TXDMA_Handler.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
-	I2S3_TXDMA_Handler.Init.MemBurst = DMA_MBURST_SINGLE;                  /* 存储器单次突发传输 */
-	I2S3_TXDMA_Handler.Init.PeriphBurst = DMA_PBURST_SINGLE;               /* 外设突发单次传输 */
+    /* Configure DMA used for I2S3 */
+    __HAL_RCC_DMA1_CLK_ENABLE();
+    I2S3_TXDMA_Handler.Instance = DMA1_Stream7;
+    I2S3_TXDMA_Handler.Init.Channel = DMA_CHANNEL_0;
+    I2S3_TXDMA_Handler.Init.Direction = DMA_MEMORY_TO_PERIPH;
+    I2S3_TXDMA_Handler.Init.PeriphInc = DMA_PINC_DISABLE;
+    I2S3_TXDMA_Handler.Init.MemInc = DMA_MINC_ENABLE;
+    I2S3_TXDMA_Handler.Init.PeriphDataAlignment = DMA_PDATAALIGN_HALFWORD;
+    I2S3_TXDMA_Handler.Init.MemDataAlignment = DMA_MDATAALIGN_HALFWORD;
+    I2S3_TXDMA_Handler.Init.Mode = DMA_CIRCULAR;
+    I2S3_TXDMA_Handler.Init.Priority = DMA_PRIORITY_HIGH;
+    I2S3_TXDMA_Handler.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
+    I2S3_TXDMA_Handler.Init.MemBurst = DMA_MBURST_SINGLE;                  /* 存储器单次突发传输 */
+    I2S3_TXDMA_Handler.Init.PeriphBurst = DMA_PBURST_SINGLE;               /* 外设突发单次传输 */
 
-	__HAL_LINKDMA(&I2S3_Handler, hdmatx, I2S3_TXDMA_Handler);
-	HAL_DMA_DeInit(&I2S3_TXDMA_Handler);
-	HAL_DMA_Init(&I2S3_TXDMA_Handler);
-	// __HAL_DMA_ENABLE(&I2S3_TXDMA_Handler);
+    __HAL_LINKDMA(&I2S3_Handler, hdmatx, I2S3_TXDMA_Handler);
+    HAL_DMA_DeInit(&I2S3_TXDMA_Handler);
+    HAL_DMA_Init(&I2S3_TXDMA_Handler);
+    // __HAL_DMA_ENABLE(&I2S3_TXDMA_Handler);
 
-	__HAL_DMA_DISABLE(&I2S3_TXDMA_Handler);
-	__HAL_DMA_ENABLE_IT(&I2S3_TXDMA_Handler, DMA_IT_TC);                   /* 开启传输完成中断 */
-	__HAL_DMA_CLEAR_FLAG(&I2S3_TXDMA_Handler, DMA_FLAG_TCIF0_4);
+    __HAL_DMA_DISABLE(&I2S3_TXDMA_Handler);
+    __HAL_DMA_ENABLE_IT(&I2S3_TXDMA_Handler, DMA_IT_TC);                   /* 开启传输完成中断 */
+    __HAL_DMA_CLEAR_FLAG(&I2S3_TXDMA_Handler, DMA_FLAG_TCIF0_4);
 
-	HAL_NVIC_SetPriority(DMA1_Stream7_IRQn, 0, 0);
-	HAL_NVIC_EnableIRQ(DMA1_Stream7_IRQn);
+    HAL_NVIC_SetPriority(DMA1_Stream7_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(DMA1_Stream7_IRQn);
 }
 
 /**
  * @brief 底层驱动 会被HAL_I2S_Init()调用
  * @param hi2s
  */
+#if 0
 void HAL_I2S_MspInit(I2S_HandleTypeDef *hi2s)
 {
-	GPIO_InitTypeDef gpio_init_struct;
+    GPIO_InitTypeDef gpio_init_struct;
 
-	__HAL_RCC_SPI2_CLK_ENABLE();    /* Enable SPI2/I2S2 clock */
-	__HAL_RCC_GPIOC_CLK_ENABLE();   /* MCk */
-	__HAL_RCC_GPIOB_CLK_ENABLE();   /* SCK, SD, ext_SD */
-	__HAL_RCC_GPIOA_CLK_ENABLE();   /* WS */
+    __HAL_RCC_SPI2_CLK_ENABLE();    /* Enable SPI2/I2S2 clock */
+    __HAL_RCC_GPIOC_CLK_ENABLE();   /* MCk */
+    __HAL_RCC_GPIOB_CLK_ENABLE();   /* SCK, SD, ext_SD */
+    __HAL_RCC_GPIOA_CLK_ENABLE();   /* WS */
 
-	gpio_init_struct.Pin = I2S_LRCK_GPIO_PIN;
-	gpio_init_struct.Mode = GPIO_MODE_AF_PP;                /* 推挽复用 */
-	gpio_init_struct.Pull = GPIO_PULLUP;                    /* 上拉 */
-	gpio_init_struct.Speed = GPIO_SPEED_HIGH;               /* 高速 */
-	gpio_init_struct.Alternate = GPIO_AF5_SPI2;             /* 复用为SPI/I2S */
-	HAL_GPIO_Init(I2S_LRCK_GPIO_PORT, &gpio_init_struct);   /* 初始化I2S_LRCK引脚 */
+    gpio_init_struct.Pin = I2S_LRCK_GPIO_PIN;
+    gpio_init_struct.Mode = GPIO_MODE_AF_PP;                /* 推挽复用 */
+    gpio_init_struct.Pull = GPIO_PULLUP;                    /* 上拉 */
+    gpio_init_struct.Speed = GPIO_SPEED_HIGH;               /* 高速 */
+    gpio_init_struct.Alternate = GPIO_AF5_SPI2;             /* 复用为SPI/I2S */
+    HAL_GPIO_Init(I2S_LRCK_GPIO_PORT, &gpio_init_struct);   /* 初始化I2S_LRCK引脚 */
 
-	gpio_init_struct.Pin = I2S_SCLK_GPIO_PIN;
-	HAL_GPIO_Init(I2S_SCLK_GPIO_PORT, &gpio_init_struct);    /* 初始化I2S_SCLK引脚 */
+    gpio_init_struct.Pin = I2S_SCLK_GPIO_PIN;
+    HAL_GPIO_Init(I2S_SCLK_GPIO_PORT, &gpio_init_struct);    /* 初始化I2S_SCLK引脚 */
 
-	gpio_init_struct.Pin = I2S_SDOUT_GPIO_PIN;
-	HAL_GPIO_Init(I2S_SDOUT_GPIO_PORT, &gpio_init_struct);   /* 初始化I2S_SDOUT引脚 */
+    gpio_init_struct.Pin = I2S_SDOUT_GPIO_PIN;
+    HAL_GPIO_Init(I2S_SDOUT_GPIO_PORT, &gpio_init_struct);   /* 初始化I2S_SDOUT引脚 */
 
-	gpio_init_struct.Pin = I2S_SDIN_GPIO_PIN;
-	HAL_GPIO_Init(I2S_SDIN_GPIO_PORT, &gpio_init_struct);    /* 初始化I2S_SDIN引脚 */
+    gpio_init_struct.Pin = I2S_SDIN_GPIO_PIN;
+    HAL_GPIO_Init(I2S_SDIN_GPIO_PORT, &gpio_init_struct);    /* 初始化I2S_SDIN引脚 */
 
-	gpio_init_struct.Pin = I2S_MCLK_GPIO_PIN;
-	HAL_GPIO_Init(I2S_MCLK_GPIO_PORT, &gpio_init_struct);    /* 初始化I2S_MCLK引脚 */
+    gpio_init_struct.Pin = I2S_MCLK_GPIO_PIN;
+    HAL_GPIO_Init(I2S_MCLK_GPIO_PORT, &gpio_init_struct);    /* 初始化I2S_MCLK引脚 */
+
+    LOG_I("I2S3 Msp Init done.");
 }
+#endif
 /**
  * @brief 传输完成中断
  */
 void DMA1_Stream7_IRQHandler(void)
 {
-	rt_audio_tx_complete(&snd_dev.audio);
-	HAL_DMA_IRQHandler(&I2S3_TXDMA_Handler);
+    rt_audio_tx_complete(&snd_dev.audio);
+    HAL_DMA_IRQHandler(&I2S3_TXDMA_Handler);
 }
 
 //void HAL_SAI_TxHalfCpltCallback(SAI_HandleTypeDef *hsai)
@@ -173,37 +177,37 @@ void DMA1_Stream7_IRQHandler(void)
 void I2S_Frequency_Set(uint32_t samplerate)
 {
 
-	// uint8_t i = 0;
-	// uint32_t tempreg = 0;
+    // uint8_t i = 0;
+    // uint32_t tempreg = 0;
 
-	// RCC_PeriphCLKInitTypeDef rcc_i2s_clkinit_struct;
+    // RCC_PeriphCLKInitTypeDef rcc_i2s_clkinit_struct;
 
-	// for (i = 0; i < (sizeof(I2S_PSC_TBL) / 10); i++)    /* 看看改采样率是否可以支持 */
-	// {
-	//     if ((samplerate / 10) == I2S_PSC_TBL[i][0])
-	//     {
-	//         break;
-	//     }
-	// }
-	// if (i == (sizeof(I2S_PSC_TBL) / 10))
-	// {
-	//     LOG_E("samplerate not supported.");
-	//     // return 1;   /* 找不到 */
-	// }
+    // for (i = 0; i < (sizeof(I2S_PSC_TBL) / 10); i++)    /* 看看改采样率是否可以支持 */
+    // {
+    //     if ((samplerate / 10) == I2S_PSC_TBL[i][0])
+    //     {
+    //         break;
+    //     }
+    // }
+    // if (i == (sizeof(I2S_PSC_TBL) / 10))
+    // {
+    //     LOG_E("samplerate not supported.");
+    //     // return 1;   /* 找不到 */
+    // }
 
-	// rcc_i2s_clkinit_struct.PeriphClockSelection = RCC_PERIPHCLK_I2S;        /* 外设时钟源选择 */
-	// rcc_i2s_clkinit_struct.PLLI2S.PLLI2SN = (uint32_t)I2S_PSC_TBL[i][1];    /* 设置PLLI2SN */
-	// rcc_i2s_clkinit_struct.PLLI2S.PLLI2SR = (uint32_t)I2S_PSC_TBL[i][2];    /* 设置PLLI2SR */
-	// HAL_RCCEx_PeriphCLKConfig(&rcc_i2s_clkinit_struct);                     /* 设置时钟 */
+    // rcc_i2s_clkinit_struct.PeriphClockSelection = RCC_PERIPHCLK_I2S;        /* 外设时钟源选择 */
+    // rcc_i2s_clkinit_struct.PLLI2S.PLLI2SN = (uint32_t)I2S_PSC_TBL[i][1];    /* 设置PLLI2SN */
+    // rcc_i2s_clkinit_struct.PLLI2S.PLLI2SR = (uint32_t)I2S_PSC_TBL[i][2];    /* 设置PLLI2SR */
+    // HAL_RCCEx_PeriphCLKConfig(&rcc_i2s_clkinit_struct);                     /* 设置时钟 */
 
-	// RCC->CR |= 1 << 26;                 /* 开启I2S时钟 */
-	// while((RCC->CR & 1 << 27) == 0);    /* 等待I2S时钟开启成功. */
-	// tempreg = I2S_PSC_TBL[i][3] << 0;   /* 设置I2SDIV */
-	// tempreg |= I2S_PSC_TBL[i][4] << 8;  /* 设置ODD位 */
-	// tempreg |= 1 << 9;                  /* 使能MCKOE位,输出MCK */
-	// I2S3_Handler.Instance->I2SPR = tempreg;           /* 设置I2SPR寄存器 */
+    // RCC->CR |= 1 << 26;                 /* 开启I2S时钟 */
+    // while((RCC->CR & 1 << 27) == 0);    /* 等待I2S时钟开启成功. */
+    // tempreg = I2S_PSC_TBL[i][3] << 0;   /* 设置I2SDIV */
+    // tempreg |= I2S_PSC_TBL[i][4] << 8;  /* 设置ODD位 */
+    // tempreg |= 1 << 9;                  /* 使能MCKOE位,输出MCK */
+    // I2S3_Handler.Instance->I2SPR = tempreg;           /* 设置I2SPR寄存器 */
 
-	// return 0;
+    // return 0;
 
 //    RCC_PeriphCLKInitTypeDef PeriphClkInit;
 
@@ -246,18 +250,18 @@ void I2S_Frequency_Set(uint32_t samplerate)
 
 void SAIA_Channels_Set(uint8_t channels)
 {
-	// if (channels == 1)
-	// {
-	//     SAI1A_Handler.Init.MonoStereoMode         = SAI_MONOMODE;
-	// }
-	// else
-	// {
-	//     SAI1A_Handler.Init.MonoStereoMode         = SAI_STEREOMODE;
-	// }
+    // if (channels == 1)
+    // {
+    //     SAI1A_Handler.Init.MonoStereoMode         = SAI_MONOMODE;
+    // }
+    // else
+    // {
+    //     SAI1A_Handler.Init.MonoStereoMode         = SAI_STEREOMODE;
+    // }
 
-	// __HAL_SAI_DISABLE(&SAI1A_Handler);
-	// HAL_SAI_Init(&SAI1A_Handler);
-	// __HAL_SAI_ENABLE(&SAI1A_Handler);
+    // __HAL_SAI_DISABLE(&SAI1A_Handler);
+    // HAL_SAI_Init(&SAI1A_Handler);
+    // __HAL_SAI_ENABLE(&SAI1A_Handler);
 }
 
 /**
@@ -265,266 +269,280 @@ void SAIA_Channels_Set(uint8_t channels)
  */
 static rt_err_t sound_getcaps(struct rt_audio_device *audio, struct rt_audio_caps *caps)
 {
-	rt_err_t result = RT_EOK;
-	struct sound_device *snd_dev;
+    rt_err_t result = RT_EOK;
+    struct sound_device *snd_dev;
 
-	RT_ASSERT(audio != RT_NULL);
-	snd_dev = (struct sound_device *) audio->parent.user_data;
+    RT_ASSERT(audio != RT_NULL);
+    snd_dev = (struct sound_device *)audio->parent.user_data;
 
-	switch (caps->main_type)
-	{
-		case AUDIO_TYPE_QUERY: /* qurey the types of hw_codec device */
-		{
-			switch (caps->sub_type)
-			{
-				case AUDIO_TYPE_QUERY:caps->udata.mask = AUDIO_TYPE_OUTPUT | AUDIO_TYPE_MIXER;
-					break;
+    switch (caps->main_type)
+    {
+        case AUDIO_TYPE_QUERY: /* qurey the types of hw_codec device */
+        {
+            switch (caps->sub_type)
+            {
+                case AUDIO_TYPE_QUERY:
+                    caps->udata.mask = AUDIO_TYPE_OUTPUT | AUDIO_TYPE_MIXER;
+                    break;
 
-				default:result = -RT_ERROR;
-					break;
-			}
+                default:
+                    result = -RT_ERROR;
+                    break;
+            }
 
-			break;
-		}
+            break;
+        }
 
-		case AUDIO_TYPE_OUTPUT: /* Provide capabilities of OUTPUT unit */
-		{
-			switch (caps->sub_type)
-			{
-				case AUDIO_DSP_PARAM:caps->udata.config.samplerate = snd_dev->replay_config.samplerate;
-					caps->udata.config.channels = snd_dev->replay_config.channels;
-					caps->udata.config.samplebits = snd_dev->replay_config.samplebits;
-					break;
+        case AUDIO_TYPE_OUTPUT: /* Provide capabilities of OUTPUT unit */
+        {
+            switch (caps->sub_type)
+            {
+                case AUDIO_DSP_PARAM:
+                    caps->udata.config.samplerate = snd_dev->replay_config.samplerate;
+                    caps->udata.config.channels = snd_dev->replay_config.channels;
+                    caps->udata.config.samplebits = snd_dev->replay_config.samplebits;
+                    break;
 
-				case AUDIO_DSP_SAMPLERATE:caps->udata.config.samplerate = snd_dev->replay_config.samplerate;
-					break;
+                case AUDIO_DSP_SAMPLERATE:
+                    caps->udata.config.samplerate = snd_dev->replay_config.samplerate;
+                    break;
 
-				case AUDIO_DSP_CHANNELS:caps->udata.config.channels = snd_dev->replay_config.channels;
-					break;
+                case AUDIO_DSP_CHANNELS:
+                    caps->udata.config.channels = snd_dev->replay_config.channels;
+                    break;
 
-				case AUDIO_DSP_SAMPLEBITS:caps->udata.config.samplebits = snd_dev->replay_config.samplebits;
-					break;
+                case AUDIO_DSP_SAMPLEBITS:
+                    caps->udata.config.samplebits = snd_dev->replay_config.samplebits;
+                    break;
 
-				default:result = -RT_ERROR;
-					break;
-			}
+                default:
+                    result = -RT_ERROR;
+                    break;
+            }
 
-			break;
-		}
+            break;
+        }
 
-		case AUDIO_TYPE_MIXER: /* report the Mixer Units */
-		{
-			switch (caps->sub_type)
-			{
-				case AUDIO_MIXER_QUERY:caps->udata.mask = AUDIO_MIXER_VOLUME;
-					break;
+        case AUDIO_TYPE_MIXER: /* report the Mixer Units */
+        {
+            switch (caps->sub_type)
+            {
+                case AUDIO_MIXER_QUERY:
+                    caps->udata.mask = AUDIO_MIXER_VOLUME;
+                    break;
 
-				case AUDIO_MIXER_VOLUME:caps->udata.value = es8388_volume_get();
-					break;
+                case AUDIO_MIXER_VOLUME:
+                    caps->udata.value = es8388_volume_get();
+                    break;
 
-				default:result = -RT_ERROR;
-					break;
-			}
+                default:
+                    result = -RT_ERROR;
+                    break;
+            }
 
-			break;
-		}
+            break;
+        }
 
-		default:result = -RT_ERROR;
-			break;
-	}
+        default:
+            result = -RT_ERROR;
+            break;
+    }
 
-	return result;
+    return result;
 }
 
 static rt_err_t sound_configure(struct rt_audio_device *audio, struct rt_audio_caps *caps)
 {
-	rt_err_t result = RT_EOK;
-	struct sound_device *snd_dev;
+    rt_err_t result = RT_EOK;
+    struct sound_device *snd_dev;
 
-	RT_ASSERT(audio != RT_NULL);
-	snd_dev = (struct sound_device *) audio->parent.user_data;
+    RT_ASSERT(audio != RT_NULL);
+    snd_dev = (struct sound_device *)audio->parent.user_data;
 
-	switch (caps->main_type)
-	{
-		case AUDIO_TYPE_MIXER:
-		{
-			switch (caps->sub_type)
-			{
-				case AUDIO_MIXER_VOLUME:
-				{
-					rt_uint8_t volume = caps->udata.value;
+    switch (caps->main_type)
+    {
+        case AUDIO_TYPE_MIXER:
+        {
+            switch (caps->sub_type)
+            {
+                case AUDIO_MIXER_VOLUME:
+                {
+                    rt_uint8_t volume = caps->udata.value;
 
-					es8388_volume_set(volume);
-					snd_dev->volume = volume;
-					LOG_D("set volume %d", volume);
-					break;
-				}
+                    es8388_volume_set(volume);
+                    snd_dev->volume = volume;
+                    LOG_D("set volume %d", volume);
+                    break;
+                }
 
-				default:result = -RT_ERROR;
-					break;
-			}
+                default:
+                    result = -RT_ERROR;
+                    break;
+            }
 
-			break;
-		}
+            break;
+        }
 
-		case AUDIO_TYPE_OUTPUT:
-		{
-			switch (caps->sub_type)
-			{
-				case AUDIO_DSP_PARAM:
-				{
-					/* set samplerate */
-					I2S_Frequency_Set(caps->udata.config.samplerate);
-					/* set channels */
-					SAIA_Channels_Set(caps->udata.config.channels);
+        case AUDIO_TYPE_OUTPUT:
+        {
+            switch (caps->sub_type)
+            {
+                case AUDIO_DSP_PARAM:
+                {
+                    /* set samplerate */
+                    I2S_Frequency_Set(caps->udata.config.samplerate);
+                    /* set channels */
+                    SAIA_Channels_Set(caps->udata.config.channels);
 
-					/* save configs */
-					snd_dev->replay_config.samplerate = caps->udata.config.samplerate;
-					snd_dev->replay_config.channels = caps->udata.config.channels;
-					snd_dev->replay_config.samplebits = caps->udata.config.samplebits;
-					LOG_D("set samplerate %d", snd_dev->replay_config.samplerate);
-					break;
-				}
+                    /* save configs */
+                    snd_dev->replay_config.samplerate = caps->udata.config.samplerate;
+                    snd_dev->replay_config.channels = caps->udata.config.channels;
+                    snd_dev->replay_config.samplebits = caps->udata.config.samplebits;
+                    LOG_D("set samplerate %d", snd_dev->replay_config.samplerate);
+                    break;
+                }
 
-				case AUDIO_DSP_SAMPLERATE:
-				{
-					I2S_Frequency_Set(caps->udata.config.samplerate);
-					snd_dev->replay_config.samplerate = caps->udata.config.samplerate;
-					LOG_D("set samplerate %d", snd_dev->replay_config.samplerate);
-					break;
-				}
+                case AUDIO_DSP_SAMPLERATE:
+                {
+                    I2S_Frequency_Set(caps->udata.config.samplerate);
+                    snd_dev->replay_config.samplerate = caps->udata.config.samplerate;
+                    LOG_D("set samplerate %d", snd_dev->replay_config.samplerate);
+                    break;
+                }
 
-				case AUDIO_DSP_CHANNELS:
-				{
-					SAIA_Channels_Set(caps->udata.config.channels);
-					snd_dev->replay_config.channels = caps->udata.config.channels;
-					LOG_D("set channels %d", snd_dev->replay_config.channels);
-					break;
-				}
+                case AUDIO_DSP_CHANNELS:
+                {
+                    SAIA_Channels_Set(caps->udata.config.channels);
+                    snd_dev->replay_config.channels = caps->udata.config.channels;
+                    LOG_D("set channels %d", snd_dev->replay_config.channels);
+                    break;
+                }
 
-				case AUDIO_DSP_SAMPLEBITS:
-				{
-					/* not support */
-					snd_dev->replay_config.samplebits = caps->udata.config.samplebits;
-					break;
-				}
+                case AUDIO_DSP_SAMPLEBITS:
+                {
+                    /* not support */
+                    snd_dev->replay_config.samplebits = caps->udata.config.samplebits;
+                    break;
+                }
 
-				default:result = -RT_ERROR;
-					break;
-			}
+                default:
+                    result = -RT_ERROR;
+                    break;
+            }
 
-			break;
-		}
+            break;
+        }
 
-		default:break;
-	}
+        default:
+            break;
+    }
 
-	return result;
+    return result;
 }
 
 static rt_err_t sound_init(struct rt_audio_device *audio)
 {
-	rt_err_t result = RT_EOK;
-	struct sound_device *snd_dev;
+    rt_err_t result = RT_EOK;
+    struct sound_device *snd_dev;
 
-	RT_ASSERT(audio != RT_NULL);
-	snd_dev = (struct sound_device *) audio->parent.user_data;
+    RT_ASSERT(audio != RT_NULL);
+    snd_dev = (struct sound_device *)audio->parent.user_data;
 
-	es8388_init("i2c2", RT_NULL);
-	I2S3_Init();
-	LOG_I("ES8388 init success.");
-	/* set default params */
-	I2S_Frequency_Set(snd_dev->replay_config.samplerate);
-	SAIA_Channels_Set(snd_dev->replay_config.channels);
+    es8388_init("i2c2", RT_NULL);
+    I2S3_Init();
+    LOG_I("ES8388 init success.");
+    /* set default params */
+    I2S_Frequency_Set(snd_dev->replay_config.samplerate);
+    SAIA_Channels_Set(snd_dev->replay_config.channels);
 
-	return result;
+    return result;
 }
 
 static rt_err_t sound_start(struct rt_audio_device *audio, int stream)
 {
-	struct sound_device *snd_dev;
+    struct sound_device *snd_dev;
 
-	RT_ASSERT(audio != RT_NULL);
-	snd_dev = (struct sound_device *) audio->parent.user_data;
+    RT_ASSERT(audio != RT_NULL);
+    snd_dev = (struct sound_device *)audio->parent.user_data;
 
-	if (stream == AUDIO_STREAM_REPLAY)
-	{
-		LOG_D("sound start.");
-		es8388_start(ES_MODE_DAC);
-		HAL_I2S_Transmit_DMA(&I2S3_Handler, (uint16_t *) snd_dev->tx_fifo, TX_FIFO_SIZE / 2);
-	}
+    if (stream == AUDIO_STREAM_REPLAY)
+    {
+        LOG_D("sound start.");
+        es8388_start(ES_MODE_DAC);
+        HAL_I2S_Transmit_DMA(&I2S3_Handler, (uint16_t *)snd_dev->tx_fifo, TX_FIFO_SIZE / 2);
+    }
 
-	return RT_EOK;
+    return RT_EOK;
 }
 
 static rt_err_t sound_stop(struct rt_audio_device *audio, int stream)
 {
-	RT_ASSERT(audio != RT_NULL);
+    RT_ASSERT(audio != RT_NULL);
 
-	if (stream == AUDIO_STREAM_REPLAY)
-	{
-		HAL_I2S_DMAStop(&I2S3_Handler);
-		es8388_stop(ES_MODE_DAC);
-		LOG_D("sound stop.");
-	}
+    if (stream == AUDIO_STREAM_REPLAY)
+    {
+        HAL_I2S_DMAStop(&I2S3_Handler);
+        es8388_stop(ES_MODE_DAC);
+        LOG_D("sound stop.");
+    }
 
-	return RT_EOK;
+    return RT_EOK;
 }
 
 static void sound_buffer_info(struct rt_audio_device *audio, struct rt_audio_buf_info *info)
 {
-	struct sound_device *snd_dev;
+    struct sound_device *snd_dev;
 
-	RT_ASSERT(audio != RT_NULL);
-	snd_dev = (struct sound_device *) audio->parent.user_data;
+    RT_ASSERT(audio != RT_NULL);
+    snd_dev = (struct sound_device *)audio->parent.user_data;
 
-	/**
-	 *               TX_FIFO
-	 * +----------------+----------------+
-	 * |     block1     |     block2     |
-	 * +----------------+----------------+
-	 *  \  block_size  /
-	 */
-	info->buffer = snd_dev->tx_fifo;
-	info->total_size = TX_FIFO_SIZE;
-	info->block_size = TX_FIFO_SIZE / 2;
-	info->block_count = 2;
+    /**
+     *               TX_FIFO
+     * +----------------+----------------+
+     * |     block1     |     block2     |
+     * +----------------+----------------+
+     *  \  block_size  /
+     */
+    info->buffer = snd_dev->tx_fifo;
+    info->total_size = TX_FIFO_SIZE;
+    info->block_size = TX_FIFO_SIZE / 2;
+    info->block_count = 2;
 }
 
 static struct rt_audio_ops snd_ops = {
-	.getcaps     = sound_getcaps,
-	.configure   = sound_configure,
-	.init        = sound_init,
-	.start       = sound_start,
-	.stop        = sound_stop,
-	.transmit    = RT_NULL,
-	.buffer_info = sound_buffer_info,
+    .getcaps     = sound_getcaps,
+    .configure   = sound_configure,
+    .init        = sound_init,
+    .start       = sound_start,
+    .stop        = sound_stop,
+    .transmit    = RT_NULL,
+    .buffer_info = sound_buffer_info,
 };
 
 int rt_hw_sound_init(void)
 {
-	rt_uint8_t *tx_fifo;
+    rt_uint8_t *tx_fifo;
 
-	if (snd_dev.tx_fifo) return RT_EOK;
+    if (snd_dev.tx_fifo) return RT_EOK;
 
-	tx_fifo = rt_malloc(TX_FIFO_SIZE);
-	if (tx_fifo == RT_NULL) return -RT_ENOMEM;
-	rt_memset(tx_fifo, 0, TX_FIFO_SIZE);
-	snd_dev.tx_fifo = tx_fifo;
+    tx_fifo = rt_malloc(TX_FIFO_SIZE);
+    if (tx_fifo == RT_NULL) return -RT_ENOMEM;
+    rt_memset(tx_fifo, 0, TX_FIFO_SIZE);
+    snd_dev.tx_fifo = tx_fifo;
 
-	/* init default configuration */
-	{
-		snd_dev.replay_config.samplerate = 44100;
-		snd_dev.replay_config.channels = 2;
-		snd_dev.replay_config.samplebits = 16;
-		snd_dev.volume = 55;
-	}
+    /* init default configuration */
+    {
+        snd_dev.replay_config.samplerate = 44100;
+        snd_dev.replay_config.channels = 2;
+        snd_dev.replay_config.samplebits = 16;
+        snd_dev.volume = 55;
+    }
 
-	/* register sound device */
-	snd_dev.audio.ops = &snd_ops;
-	rt_audio_register(&snd_dev.audio, "sound0", RT_DEVICE_FLAG_WRONLY, &snd_dev);
+    /* register sound device */
+    snd_dev.audio.ops = &snd_ops;
+    rt_audio_register(&snd_dev.audio, "sound0", RT_DEVICE_FLAG_WRONLY, &snd_dev);
 
-	LOG_I("sound0 device register done.");
-	return RT_EOK;
+    LOG_I("sound0 device register done.");
+    return RT_EOK;
 }
 INIT_DEVICE_EXPORT(rt_hw_sound_init);

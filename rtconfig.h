@@ -116,6 +116,10 @@
 #define RT_MMCSD_THREAD_PREORITY 22
 #define RT_MMCSD_MAX_PARTITION 16
 #define RT_SDIO_DEBUG
+#define RT_USING_AUDIO
+#define RT_AUDIO_REPLAY_MP_BLOCK_SIZE 4096
+#define RT_AUDIO_REPLAY_MP_BLOCK_COUNT 2
+#define RT_AUDIO_RECORD_PIPE_SIZE 2048
 
 /* Using USB */
 
@@ -161,6 +165,9 @@
 /* Wiced WiFi */
 
 
+/* CYW43012 WiFi */
+
+
 /* IoT Cloud */
 
 
@@ -183,8 +190,8 @@
 #define PKG_LVGL_THREAD_PRIO 20
 #define PKG_LVGL_THREAD_STACK_SIZE 4096
 #define PKG_LVGL_DISP_REFR_PERIOD 5
-#define PKG_LVGL_USING_V08038
-#define PKG_LVGL_VER_NUM 0x08038
+#define PKG_LVGL_USING_V08039
+#define PKG_LVGL_VER_NUM 0x080309
 
 /* u8g2: a monochrome graphic library */
 
@@ -233,6 +240,8 @@
 
 /* entertainment: terminal games and other interesting software packages */
 
+#define PKG_USING_OPTPARSE
+#define PKG_USING_OPTPARSE_V100
 
 /* Arduino libraries */
 
@@ -284,13 +293,16 @@
 #define BSP_USING_ONBOARD_LCD_PWM_BL
 #define BSP_USING_FS
 #define BSP_USING_SDCARD_FATFS
-#define BSP_USING_NES
 
 /* On-chip Peripheral Drivers */
 
 #define BSP_USING_GPIO
 #define BSP_USING_UART
 #define BSP_USING_UART1
+#define BSP_USING_I2C
+#define BSP_USING_I2C2
+#define BSP_I2C2_SCL_PIN 81
+#define BSP_I2C2_SDA_PIN 80
 #define BSP_USING_PWM
 #define BSP_USING_PWM14
 #define BSP_USING_PWM14_CH1

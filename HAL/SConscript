@@ -9,27 +9,22 @@ cwd = GetCurrentDir()
 # add general drivers
 src = []
 path =  [cwd]
-
-src += Glob('*.c')
+src += Glob('HAL.cpp')
 
 # add button hal
-src += Glob('Button/HAL_button.c')
-path += [cwd + '/Button']
+src += Glob('HAL_Button.cpp')
 
 #add lcd hal
 if GetDepend(['BSP_USING_ONBOARD_LCD']):
-    src += Glob('LCD/HAL_lcd.c')
-    path += [cwd + '/LCD']
+    src += Glob('HAL_LCD.cpp')
 
 #add rtc hal
 if GetDepend(['BSP_USING_ONCHIP_RTC']):
-    src += Glob('RTC/HAL_rtc.c')
-    path += [cwd + '/RTC']
+    src += Glob('HAL_RTC.cpp')
 
 #add sd hal
 if GetDepend(['BSP_USING_SDCARD_FATFS']):
-    src += Glob('SDCard/HAL_sdcard.c')
-    path += [cwd + '/SDCard']
+    src += Glob('HAL_SDCard.cpp')
     
 
 CPPDEFINES = ['STM32F407xx']

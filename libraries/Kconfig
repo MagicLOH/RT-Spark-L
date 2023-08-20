@@ -88,6 +88,9 @@ menu "Onboard Peripheral Drivers"
             bool "Enable Audio Record"
             default n
         endif
+    config PKG_USING_WAVPLAYER
+            bool "Enable wav player"
+            default n
 
     config BSP_USING_NES
         bool "Enable Nes Simulator"

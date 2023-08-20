@@ -10,14 +10,14 @@ CPPPATH = [cwd]
 src += Glob('_Template/*.cpp')
 CPPPATH += [cwd + '/_Template']
 
-src += Glob('Dial/*.cpp')
-CPPPATH += [cwd + '/Dial']
+src += Glob('Dialplate/*.cpp')
+CPPPATH += [cwd + '/Dialplate']
 
 src += Glob('StartUp/*.cpp')
 CPPPATH += [cwd + '/StartUp']
 
-src += Glob('SysInfos/*.cpp')
-CPPPATH += [cwd + '/SysInfos']
+src += Glob('SystemInfos/*.cpp')
+CPPPATH += [cwd + '/SystemInfos']
 
 list = os.listdir(cwd)
 for d in list:
