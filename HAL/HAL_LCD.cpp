@@ -1,4 +1,8 @@
 #include "HAL.h"
+#include "HAL_Def.h"
+
+#include <dfs_file.h>
+#include <unistd.h>
 
 #include <rtthread.h>
 #include "drv_ST7789.h"
@@ -11,6 +15,7 @@ extern rt_uint16_t BACK_COLOR, FORE_COLOR;
 #define DGB_TAG "HAL.LCD"
 #define DBG_LVL DBG_LOG
 #include <rtdbg.h>
+
 
 /**
  * full color on the lcd.
@@ -376,6 +381,89 @@ static void lcd_show_char(rt_uint16_t x, rt_uint16_t y, rt_uint8_t data, rt_uint
     }
 }
 
+
+#define FONT_GBK16_OFFSET
+#define FONT_GBK24_OFFSET
+#define FONT_GBK32_OFFSET
+/**
+ * @brief just show chinese font on lcd
+ * @param x
+ * @param y
+ * @param size
+ * @param pstr
+ */
+static rt_err_t lcd_show_chinese(rt_uint16_t x, rt_uint16_t y, const char *pdata, LCD_FontSize_t fsize)
+{
+    // 记录汉字高低字节
+    uint8_t byte_High = *pdata;
+    uint8_t byte_Low = *(pdata + 1);
+    /* 根据公式计算点阵数据位置 */
+    if (byte_Low < 0x7F)
+        byte_Low = byte_Low - 0x40;
+    else
+        byte_Low = byte_Low - 0x41;
+
+    byte_High = byte_High - 0x81;
+    uint32_t font_len = fsize * fsize / 8; // gbk 单字所用字节数
+    uint32_t font_addr = (190 * byte_High + byte_Low) * font_len; // 计算出汉字所在字库位置
+
+    int fd = 0;
+    const char *err_buf = RT_NULL;
+    rt_err_t err = RT_EOK;
+    switch (fsize)
+    {
+        case CHN_FONT_16x16:
+        {
+
+            break;
+        }
+        case CHN_FONT_24x24:
+        {
+
+
+            break;
+        }
+        case CHN_FONT_32x32:
+        {
+            
+            break;
+        }
+        default:
+            LOG_E("find (CHN_FONT_%dx%d) failed!", fsize, fsize);
+            return -RT_ERROR;
+    }
+    if (fd < 0)
+    {
+        err = rt_get_errno();
+        err_buf = rt_strerror(err);
+        LOG_E("%s", err_buf);
+    }
+    char buf[128] = {0};
+    while (1)
+    {
+        ssize_t cnt = read(fd, buf, sizeof(buf) - 1);
+        if (cnt < 0)
+        {
+            LOG_E("read file failed!");
+            return -RT_ERROR;
+        }
+        else if (cnt != sizeof(buf) - 1)
+        {
+            buf[cnt] = '\0';
+
+            break;
+        }
+        else
+        {
+            buf[cnt] = '\0';
+
+        }
+    }
+
+    close(fd);
+    return RT_EOK;
+}
+
 #define LCD_STRING_BUF_LEN 128
 /**
  * display the string on the lcd.
@@ -388,10 +476,8 @@ static void lcd_show_char(rt_uint16_t x, rt_uint16_t y, rt_uint8_t data, rt_uint
  * @return   0: display success
  *          -1: size of font is not support
  */
-rt_err_t lcd_show_string(rt_uint16_t x, rt_uint16_t y, rt_uint32_t size, const char *fmt, ...)
+rt_err_t HAL::LCD_show_string(rt_uint16_t x, rt_uint16_t y, rt_uint32_t size, const char *fmt, ...)
 {
-
-
     va_list args;
     rt_uint8_t buf[LCD_STRING_BUF_LEN] = {0};
     rt_uint8_t *p = RT_NULL;

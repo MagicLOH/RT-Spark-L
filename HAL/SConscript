@@ -25,6 +25,10 @@ if GetDepend(['BSP_USING_ONCHIP_RTC']):
 #add sd hal
 if GetDepend(['BSP_USING_SDCARD_FATFS']):
     src += Glob('HAL_SDCard.cpp')
+
+#add spi flash
+if GetDepend(['BSP_USING_SPI_FLASH']):
+    src += Glob('HAL_SPIFlash.cpp')
     
 
 CPPDEFINES = ['STM32F407xx']

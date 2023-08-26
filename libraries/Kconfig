@@ -1,6 +1,6 @@
 config SOC_FAMILY_STM32
     bool
-    
+
 config SOC_SERIES_STM32F4
     bool
     select ARCH_ARM_CORTEX_M4
@@ -56,23 +56,71 @@ menu "Onboard Peripheral Drivers"
             default n
     endif
 
+    config BSP_USING_ENC28j60
+            bool "Enable Ethernet 28j60"
+            default n
+            select BSP_USING_SPI
+            select BSP_USING_SPI1
+            select RT_USING_ENC28J60
+
+    config BSP_USING_SPI_FLASH
+        bool "Enable SPI FLASH (W25Q64 spi2)"
+        select BSP_USING_SPI
+        select BSP_USING_SPI2
+        select RT_USING_SFUD
+        select RT_SFUD_USING_SFDP
+        default n
+
     menuconfig BSP_USING_FS
         bool "Enable File System"
         select RT_USING_DFS
         select RT_USING_DFS_ROMFS
         default n
+
         if BSP_USING_FS
             config BSP_USING_SDCARD_FATFS
                 bool "Enable SDCARD (FATFS)"
                 select BSP_USING_SDIO
                 select RT_USING_DFS_ELMFAT
-                default y
+                default n
             if BSP_USING_SDCARD_FATFS
                 menuconfig BSP_USING_FS_AUTO_MOUNT
                     bool "Enable filesystem auto mount"
                     default n
             endif
+
+            config BSP_USING_FLASH_FATFS
+                bool "Enable FAL filesystem partition base on W25Q64"
+                select BSP_USING_FAL
+                default n
+            if BSP_USING_FLASH_FATFS
+                menuconfig BSP_USING_FLASH_FS_AUTO_MOUNT
+                    bool "Enable filesystem auto mount"
+                    default n
+            endif
         endif
+
+    config BSP_USING_FAL
+        bool "Enable FAL (enable on-chip flash and spi2 flash)"
+        select BSP_USING_SPI_FLASH
+        select BSP_USING_ON_CHIP_FLASH
+        select RT_USING_FAL
+        select FAL_DEBUG_CONFIG
+        select FAL_PART_HAS_TABLE_CFG
+        select FAL_USING_SFUD_PORT
+
+    if BSP_USING_FAL
+        menuconfig BSP_USING_BOOTLOADER
+        bool "Enable bootloader partition table"
+        default n
+    endif
+
+
+    config BSP_USING_EASYFLASH
+        bool "Enable Easy Flash base on FAL"
+        select BSP_USING_FAL
+        select PKG_USING_EASYFLASH
+        default n
 
     menuconfig BSP_USING_AUDIO
         bool "Enable Audio Module"
@@ -178,6 +226,90 @@ menu "On-chip Peripheral Drivers"
                 endif
         endif
 
+    config BSP_USING_ON_CHIP_FLASH
+        bool "Enable on-chip FLASH"
+        default n
+
+    menuconfig BSP_USING_SOFT_SPI
+        bool "Enable soft SPI BUS"
+        default n
+        select RT_USING_SPI
+        select RT_USING_SPI_BITOPS
+        select RT_USING_PIN
+        if BSP_USING_SOFT_SPI
+            menuconfig BSP_USING_SOFT_SPI1
+                bool "Enable soft SPI1 BUS (software simulation)"
+                default n
+                if BSP_USING_SOFT_SPI1
+                    config BSP_S_SPI1_SCK_PIN
+                        int "soft spi1 sck pin number"
+                        range 1 176
+                        default 16
+                    config BSP_S_SPI1_MISO_PIN
+                        int "soft spi1 miso pin number"
+                        range 1 176
+                        default 18
+                    config BSP_S_SPI1_MOSI_PIN
+                        int "soft spi1 mosi pin number"
+                        range 1 176
+                        default 91
+                endif
+
+            menuconfig BSP_USING_SOFT_SPI2
+                bool "Enable soft SPI2 BUS (software simulation)"
+                default n
+                if BSP_USING_SOFT_SPI2
+                    config BSP_S_SPI2_SCK_PIN
+                        int "soft spi2 sck pin number"
+                        range 1 176
+                        default 19
+                    config BSP_S_SPI2_MISO_PIN
+                        int "soft spi2 miso pin number"
+                        range 1 176
+                        default 20
+                    config BSP_S_SPI2_MOSI_PIN
+                        int "soft spi2 mosi pin number"
+                        range 1 176
+                        default 21
+                endif
+        endif
+
+    menuconfig BSP_USING_SPI
+        bool "Enable SPI BUS"
+        default n
+        select RT_USING_SPI
+        if BSP_USING_SPI
+            config BSP_USING_SPI1
+                bool "Enable SPI1 BUS"
+                default n
+
+            config BSP_SPI1_TX_USING_DMA
+                bool "Enable SPI1 TX DMA"
+                depends on BSP_USING_SPI1
+                default n
+
+            config BSP_SPI1_RX_USING_DMA
+                bool "Enable SPI1 RX DMA"
+                depends on BSP_USING_SPI1
+                select BSP_SPI1_TX_USING_DMA
+                default n
+
+            config BSP_USING_SPI2
+                bool "Enable SPI2 BUS for NorFlash and RW007 onboard"
+                default n
+
+            config BSP_SPI2_TX_USING_DMA
+                bool "Enable SPI2 TX DMA"
+                depends on BSP_USING_SPI2
+                default n
+
+            config BSP_SPI2_RX_USING_DMA
+                bool "Enable SPI2 RX DMA"
+                depends on BSP_USING_SPI2
+                select BSP_SPI2_TX_USING_DMA
+                default n
+        endif
+
 	menuconfig BSP_USING_TIM
         bool "Enable timer"
         default n
@@ -195,7 +327,7 @@ menu "On-chip Peripheral Drivers"
                 bool "Enable TIM14"
                 default n
         endif
-	
+
 	menuconfig BSP_USING_PWM
         bool "Enable PWM"
         default n
@@ -254,18 +386,19 @@ menu "On-chip Peripheral Drivers"
          select RT_USING_SDIO
          select RT_USING_DFS
          default n
+
      config SDIO_MAX_FREQ
          int "sdio max freq"
          range 0 24000000
          depends on BSP_USING_SDIO
          default 1000000
 
-    source "$RTT_DIR/../libraries/HAL_Drivers/Kconfig" 
-    
+    source "$RTT_DIR/../libraries/HAL_Drivers/Kconfig"
+
 endmenu
 
 menu "Board extended module Drivers"
 
 endmenu
- 
+
 endmenu

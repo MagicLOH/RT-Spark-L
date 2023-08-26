@@ -14,17 +14,11 @@
 
 static char page_buf[LCD_MAX_NUM];
 
-rt_err_t SD_DirScan(const char *path)
-{
-
-    return RT_EOK;
-}
-
-rt_err_t SD_GetFileInfos(int argc, char *argv[])
+static rt_err_t SD_GetFileInfos(int argc, char *argv[])
 {
     if (argc != 2)
     {
-        LOG_E("Usage: %s [path/filename]", argv[0]);
+        LOG_W("Usage: %s [path/filename]", argv[0]);
         return RT_ERROR;
     }
 
@@ -58,12 +52,87 @@ rt_err_t SD_GetFileInfos(int argc, char *argv[])
     close(fd);
     return RT_EOK;
 }
-MSH_CMD_EXPORT(SD_GetFileInfos, sd_print_infos);
+MSH_CMD_EXPORT_ALIAS(SD_GetFileInfos, sd_print_infos, print one file infos);
+
+static rt_err_t SD_Read(int argc, char *argv[])
+{
+    if (argc != 2)
+    {
+        LOG_W("Usage: %s <path/filename>", argv[0]);
+        return RT_ERROR;
+    }
+
+    int fd = open(argv[1], O_RDONLY);
+    if (fd < 0)
+    {
+        rt_kprintf("sdcard open file failed!\n");
+        return -RT_ERROR;
+    }
+//    LOG_I("sdcard open novel file successfully.");
+
+    rt_kprintf("================READ================\n");
+    char buf[128] = {0};
+    while (1)
+    {
+        ssize_t cnt = read(fd, buf, sizeof(buf) - 1);
+        if (cnt < 0)
+        {
+            LOG_E("read file failed!");
+            return -RT_ERROR;
+        }
+        else if (cnt != sizeof(buf) - 1)
+        {
+            buf[cnt] = '\0';
+//            rt_kprintf("read count = (%d)\n", cnt);
+            rt_kprintf("%s\n", buf);
+            rt_kprintf("====================================\n");
+            break;
+        }
+        else
+        {
+            buf[cnt] = '\0';
+//            rt_kprintf("read count = (%d)\n", cnt);
+            rt_kprintf("%s\n", buf);
+        }
+    }
+
+    close(fd);
+    return RT_EOK;
+}
+MSH_CMD_EXPORT_ALIAS(SD_Read, sd_read, simply read a file);
+
+static rt_err_t SD_Write(int argc, char *argv[])
+{
+    if (argc != 3)
+    {
+        LOG_W("Usage: %s <dest> <src>", argv[0]);
+        return -RT_ERROR;
+    }
+    int fd = open(argv[1], O_RDWR | O_CREAT);
+    if (fd < 0)
+    {
+        LOG_E("open fill failed, please check path is exist!");
+        return -RT_ERROR;
+    }
+
+    char *p = argv[2];
+    ssize_t w_size = write(fd, p, strlen(p) + 1); // remain one character for '\0'
+    if (w_size < 0)
+    {
+        LOG_E("write failed!");
+        return -RT_ERROR;
+    }
+    rt_kprintf("write count = %d\n", w_size);
+
+    close(fd);
+    return RT_EOK;
+}
+MSH_CMD_EXPORT_ALIAS(SD_Write, sd_write, simply write to a file);
 
 /**
  * @brief: manually mount sdcard on file system
  */
-void HAL::SD_Init()
+void HAL::SD_MountFS()
 {
 //	rt_thread_delay(100);
     if (dfs_mount("sd0", "/sdcard", "elm", 0, 0) == RT_EOK)
@@ -75,4 +144,9 @@ void HAL::SD_Init()
         LOG_E("SD card mount to '/sdcard' failed!");
         return;
     }
+}
+
+void HAL::SD_FontLib_Update()
+{
+
 }

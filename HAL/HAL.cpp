@@ -19,9 +19,14 @@ static int myHAL_Init(void)
 
     HAL::Button_Init();
 
-    HAL::SD_Init(); // manually mount sd
+#ifndef BSP_USING_FS_AUTO_MOUNT
+    HAL::SD_MountFS();
+#endif
 
-    
+#ifndef BSP_USING_FLASH_FS_AUTO_MOUNT
+    HAL::SPIFlash_MountFS();
+#endif
+
     LOG_I("myHAL_Init done.");
     return 0;
 }

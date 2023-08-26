@@ -22,7 +22,16 @@ namespace HAL
     void Button_onLongPressing(void *);
 
     /* SDCard */
-    void SD_Init();
+    void SD_MountFS();
+    void SD_FontLib_Update();
+
+    /* LCD */
+    rt_err_t LCD_show_string(rt_uint16_t x, rt_uint16_t y, rt_uint32_t size, const char *fmt, ...);
+
+    /* External Flash (W25Q64) */
+    void SPIFlash_MountFS();
+    rt_err_t SPIFlash_Read(const char *path, int flag);
+
 }
 
 

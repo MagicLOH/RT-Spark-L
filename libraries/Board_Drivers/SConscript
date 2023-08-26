@@ -23,9 +23,25 @@ if GetDepend(['BSP_USING_SRAM']):
 if GetDepend(['BSP_USING_ONBOARD_LCD']):
     src += Glob('LCD_ST7789/Drv_ST7789.c')
     path += [cwd + '/LCD_ST7789']
-    
+
+# File System
 if GetDepend(['BSP_USING_FS']):
     src += Glob('Drv_FileSystem.c')
+
+# NorFlash W25Q64
+if GetDepend(['BSP_USING_SPI_FLASH']):
+    src += Glob('SPIFlash_W25Q64/*.c')
+    path += [cwd + '/SPIFlash_W25Q64']
+
+# Flash Abstract Layer
+if GetDepend(['BSP_USING_FAL']):
+    src += Glob('fal/*.c')
+    path += [cwd + '/fal']
+
+# EasyFlash
+if GetDepend(['BSP_USING_EASYFLASH']):
+    src += Glob('easyflash/*.c')
+    path += [cwd + '/easyflash']
 
 #add audio module
 if GetDepend(['BSP_USING_AUDIO']):

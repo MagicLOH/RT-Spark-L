@@ -30,4 +30,12 @@ typedef struct Novel
     struct Novel *next;
 } Novel_t;
 
+/* LCD */
+typedef enum
+{
+    CHN_FONT_16x16 = 16,
+    CHN_FONT_24x24 = 24,
+    CHN_FONT_32x32 = 32,
+} LCD_FontSize_t;
+
 #endif

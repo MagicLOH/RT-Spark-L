@@ -5,14 +5,18 @@
 #define DBG_LVL DBG_LOG
 #include <rtdbg.h>
 
+#if 0
 #include <lvgl.h>
 #include "PageManager.h"
 #include "AppFactory.h"
 #include "ResourcePool.h"
-
-
+#endif
+/**
+ * @brief Applications Init Entry
+ */
 void App_Init()
 {
+#if 0
     static AppFactory factory;
     static PageManager manager(&factory);
 
@@ -52,6 +56,7 @@ void App_Init()
     manager.SetGlobalLoadAnimType(PageManager::LOAD_ANIM_OVER_TOP);
 
     manager.Push("Pages/Startup"); // default display page
+#endif
 
     LOG_I("App_Init done.");
 }

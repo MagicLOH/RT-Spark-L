@@ -5,7 +5,8 @@ import rtconfig
 if os.path.exists('rt-thread'):
     RTT_ROOT = os.path.normpath(os.getcwd() + '/rt-thread')
 else:
-    RTT_ROOT = os.path.normpath(os.getcwd() + '../../rt-thread')
+    RTT_ROOT = os.path.normpath(os.getcwd() + '/../rt-thread')
+    print(RTT_ROOT)
 
 sys.path = sys.path + [os.path.join(RTT_ROOT, 'tools')]
 try:
@@ -40,11 +41,10 @@ if os.path.exists(SDK_ROOT + '/libraries'):
     libraries_path_prefix = SDK_ROOT + '/libraries'
 
 else:
-    libraries_path_prefix = os.path.dirname(SDK_ROOT) + '../../libraries'
+    libraries_path_prefix = os.path.dirname(SDK_ROOT) + '/libraries'
 
 SDK_LIB = libraries_path_prefix
 Export('SDK_LIB')
-
 
 # prepare building environment
 objs = PrepareBuilding(env, RTT_ROOT, has_libcpu=False)
