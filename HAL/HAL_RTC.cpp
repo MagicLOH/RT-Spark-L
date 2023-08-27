@@ -39,7 +39,5 @@ void HAL::RTC_Init(void)
 //	/* 获取时间 */
 //	time_t now = time(RT_NULL);
 //	rt_kprintf("%s", ctime(&now));
-
-    LOG_I("RTC_Init done.");
 }
 

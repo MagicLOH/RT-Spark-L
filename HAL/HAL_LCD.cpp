@@ -381,10 +381,6 @@ static void lcd_show_char(rt_uint16_t x, rt_uint16_t y, rt_uint8_t data, rt_uint
     }
 }
 
-
-#define FONT_GBK16_OFFSET
-#define FONT_GBK24_OFFSET
-#define FONT_GBK32_OFFSET
 /**
  * @brief just show chinese font on lcd
  * @param x
@@ -394,73 +390,47 @@ static void lcd_show_char(rt_uint16_t x, rt_uint16_t y, rt_uint8_t data, rt_uint
  */
 static rt_err_t lcd_show_chinese(rt_uint16_t x, rt_uint16_t y, const char *pdata, LCD_FontSize_t fsize)
 {
-    // 记录汉字高低字节
+    /* Calculate chinese font's direction */
     uint8_t byte_High = *pdata;
     uint8_t byte_Low = *(pdata + 1);
-    /* 根据公式计算点阵数据位置 */
     if (byte_Low < 0x7F)
         byte_Low = byte_Low - 0x40;
     else
         byte_Low = byte_Low - 0x41;
-
     byte_High = byte_High - 0x81;
-    uint32_t font_len = fsize * fsize / 8; // gbk 单字所用字节数
-    uint32_t font_addr = (190 * byte_High + byte_Low) * font_len; // 计算出汉字所在字库位置
+    uint32_t font_used = fsize * fsize / 8; // gbk 单字所用字节数
+    uint32_t font_addr = (190 * byte_High + byte_Low) * font_used; // 计算出汉字所在字库位置
+//    LOG_D("font_addr = 0x%X", font_addr);
 
-    int fd = 0;
-    const char *err_buf = RT_NULL;
     rt_err_t err = RT_EOK;
-    switch (fsize)
-    {
-        case CHN_FONT_16x16:
-        {
-
-            break;
-        }
-        case CHN_FONT_24x24:
-        {
-
-
-            break;
-        }
-        case CHN_FONT_32x32:
-        {
-            
-            break;
-        }
-        default:
-            LOG_E("find (CHN_FONT_%dx%d) failed!", fsize, fsize);
-            return -RT_ERROR;
-    }
-    if (fd < 0)
-    {
-        err = rt_get_errno();
-        err_buf = rt_strerror(err);
-        LOG_E("%s", err_buf);
-    }
     char buf[128] = {0};
-    while (1)
+    /* offset indicate direction to read corresponding font Hex data */
+    err = HAL::SPI_Flash_Read("font", buf, font_addr, font_used);
+    if (err != RT_EOK)
     {
-        ssize_t cnt = read(fd, buf, sizeof(buf) - 1);
-        if (cnt < 0)
-        {
-            LOG_E("read file failed!");
-            return -RT_ERROR;
-        }
-        else if (cnt != sizeof(buf) - 1)
-        {
-            buf[cnt] = '\0';
+        LOG_E("found lib in flash falied!");
+        return -RT_ERROR;
+    }
 
-            break;
-        }
-        else
+    /* Draw a chinese font */
+    uint16_t x0 = x;
+    for (int j = 0; j < font_used; j++)
+    {
+        for (int i = 0; i < 8; i++)
         {
-            buf[cnt] = '\0';
-
+            if (buf[j] >> i & 0x01)
+            {
+                lcd_draw_point(x, y);
+            }
+            x++;
+        }
+        if (x - x0 == fsize)
+        {
+            y++;
+            x = x0;
         }
     }
 
-    close(fd);
     return RT_EOK;
 }
 
@@ -476,7 +446,7 @@ static rt_err_t lcd_show_chinese(rt_uint16_t x, rt_uint16_t y, const char *pdata
  * @return   0: display success
  *          -1: size of font is not support
  */
-rt_err_t HAL::LCD_show_string(rt_uint16_t x, rt_uint16_t y, rt_uint32_t size, const char *fmt, ...)
+rt_err_t HAL::LCD_ShowString(rt_uint16_t x, rt_uint16_t y, rt_uint32_t size, const char *fmt, ...)
 {
     va_list args;
     rt_uint8_t buf[LCD_STRING_BUF_LEN] = {0};
@@ -493,25 +463,85 @@ rt_err_t HAL::LCD_show_string(rt_uint16_t x, rt_uint16_t y, rt_uint32_t size, co
     va_end(args);
 
     p = buf;
-    while (*p != '\0')
+    if (*p < 0x80) /*!< Display Ascii character*/
     {
-        if (x > LCD_W - size / 2)
+        while (*p != '\0')
         {
-            x = 0;
-            y += size;
+            if (x > LCD_W - size / 2)
+            {
+                x = 0;
+                y += size;
+            }
+            if (y > LCD_H - size)
+            {
+                y = x = 0;
+                lcd_clear(RED);
+            }
+            lcd_show_char(x, y, *p, size);
+            x += size / 2;
+            p++;
         }
-        if (y > LCD_H - size)
+    }
+    else /*!< Display Chinese character*/
+    {
+        while (*p)
         {
-            y = x = 0;
-            lcd_clear(RED);
+            if (x > LCD_W - size / 2)
+            {
+                x = 0;
+                y += size;
+            }
+            if (y > LCD_H - size)
+            {
+                y = x = 0;
+                lcd_clear(RED); // display false color
+            }
+            lcd_show_chinese(x, y, (char *)p, (LCD_FontSize_t)size);
+            x += size;
+            p += 2; // chinese font need extra offset one byte
         }
-        lcd_show_char(x, y, *p, size);
-        x += size / 2;
-        p++;
     }
 
     return RT_EOK;
 }
+
+#if defined(LCD_TEST)
+void HAL::show(uint16_t x, uint16_t y)
+{
+    const char zhong[] = {
+        0x80, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00, 0xFC, 0x1F, 0x84, 0x10, 0x84, 0x10, 0x84, 0x10,
+        0x84, 0x10, 0x84, 0x10, 0xFC, 0x1F, 0x84, 0x10, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00, 0x80, 0x00,
+    };/*"中",0*/
+
+    uint16_t x0 = x;
+    for (int j = 0; j < 16 * 16 / 8; j++)
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            if (zhong[j] >> i & 0x01)
+            {
+                lcd_draw_point(x, y);
+            }
+            x++;
+        }
+        if (x - x0 == 16)
+        {
+            y++;
+            x = x0;
+        }
+    }
+}
+
+void print_one_byte(uint16_t font_used)
+{
+    char buf[128] = {0};
+//    for (int i = 0; i < font_used; i++)
+//    {
+//        rt_kprintf("0x%02X ", buf[i]);
+//    }
+//    rt_kprintf("\n");
+}
+#endif
 
 /**
  * display the number on the lcd.

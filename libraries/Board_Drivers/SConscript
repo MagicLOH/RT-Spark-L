@@ -21,17 +21,17 @@ if GetDepend(['BSP_USING_SRAM']):
     src += Glob('drv_sram.c')
     
 if GetDepend(['BSP_USING_ONBOARD_LCD']):
-    src += Glob('LCD_ST7789/Drv_ST7789.c')
+    src += Glob('LCD_ST7789/*.c')
     path += [cwd + '/LCD_ST7789']
 
 # File System
 if GetDepend(['BSP_USING_FS']):
-    src += Glob('Drv_FileSystem.c')
+    src += Glob('drv_filesystem.c')
 
 # NorFlash W25Q64
 if GetDepend(['BSP_USING_SPI_FLASH']):
-    src += Glob('SPIFlash_W25Q64/*.c')
-    path += [cwd + '/SPIFlash_W25Q64']
+    src += Glob('SPI_Flash_W25Q64/*.c')
+    path += [cwd + '/SPI_Flash_W25Q64']
 
 # Flash Abstract Layer
 if GetDepend(['BSP_USING_FAL']):
@@ -45,12 +45,11 @@ if GetDepend(['BSP_USING_EASYFLASH']):
 
 #add audio module
 if GetDepend(['BSP_USING_AUDIO']):
-    src += Glob('Audio_ES8388/drv_es8388.c')
-    src += Glob('Audio_ES8388/drv_sound.c')
+    src += Glob('Audio_ES8388/*.c')
     path += [cwd + '/Audio_ES8388']
 
 if GetDepend(['BSP_USING_AUDIO_RECORD']):
-    src += Glob('Audio_ES8388/drv_mic.c')
+    src += Glob('Audio_ES8388/*.c')
 
 CPPDEFINES = ['STM32F407xx']
 group = DefineGroup('Drivers', src, depend = [''], CPPPATH = path, CPPDEFINES = CPPDEFINES)

@@ -23,15 +23,22 @@ namespace HAL
 
     /* SDCard */
     void SD_MountFS();
-    void SD_FontLib_Update();
+    void SD_FontLib_Update(const char *path);
 
     /* LCD */
-    rt_err_t LCD_show_string(rt_uint16_t x, rt_uint16_t y, rt_uint32_t size, const char *fmt, ...);
+    rt_err_t LCD_ShowString(rt_uint16_t x, rt_uint16_t y, rt_uint32_t size, const char *fmt, ...);
+
 
     /* External Flash (W25Q64) */
-    void SPIFlash_MountFS();
-    rt_err_t SPIFlash_Read(const char *path, int flag);
+    void SPI_Flash_MountFS();
+    rt_err_t SPI_Flash_Read(const char *partiton_name,
+                            const char *dest_buf,
+                            uint32_t start_offset,
+                            uint16_t font_len);
+    rt_err_t SPI_Flash_FontLibUpdate(const char *partiton_name,
+                                     const char *lib_path);
 
+    void show(uint16_t x, uint16_t y);
 }
 
 

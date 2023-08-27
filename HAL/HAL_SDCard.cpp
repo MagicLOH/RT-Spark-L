@@ -84,7 +84,11 @@ static rt_err_t SD_Read(int argc, char *argv[])
         {
             buf[cnt] = '\0';
 //            rt_kprintf("read count = (%d)\n", cnt);
-            rt_kprintf("%s\n", buf);
+//            rt_kprintf("%s\n", buf);
+            for (int i = 0; i < sizeof(buf); i++)
+            {
+                rt_kprintf("0x%02X ", buf[i]);
+            }
             rt_kprintf("====================================\n");
             break;
         }
@@ -92,7 +96,11 @@ static rt_err_t SD_Read(int argc, char *argv[])
         {
             buf[cnt] = '\0';
 //            rt_kprintf("read count = (%d)\n", cnt);
-            rt_kprintf("%s\n", buf);
+//            rt_kprintf("%s\n", buf);
+            for (int i = 0; i < sizeof(buf); i++)
+            {
+                rt_kprintf("0x%02X ", buf[i]);
+            }
         }
     }
 
@@ -146,7 +154,34 @@ void HAL::SD_MountFS()
     }
 }
 
-void HAL::SD_FontLib_Update()
+void HAL::SD_FontLib_Update(const char *path)
 {
+    int fd = open(path, O_RDONLY);
+    if (fd < 0)
+    {
+        LOG_E("open fill failed, please check path is exist!");
+        return;
+    }
+    struct stat f_stat = {0};
+    fstat(fd, &f_stat);
+    off_t FontLib_size = f_stat.st_size;
 
+    uint16_t buf_size = 1024 * 2;
+    char *buf = (char *)rt_malloc(sizeof(char) * buf_size);
+    RT_ASSERT(buf);
+
+    ssize_t s = 0;
+    while (1)
+    {
+        s = read(fd, buf, buf_size - 1);
+        if (s < 0)
+        {
+            LOG_E("read font lib failed!");
+            break;
+        }
+        buf[buf_size] = '\0';
+
+
+    }
+    close(fd);
 }
