@@ -58,7 +58,6 @@ void App_Init()
     manager.Push("Pages/Startup"); // default display page
 #endif
 
-
     LOG_I("App_Init done.");
 }
 

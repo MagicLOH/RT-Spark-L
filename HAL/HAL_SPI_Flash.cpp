@@ -52,22 +52,25 @@ rt_err_t HAL::SPI_Flash_Read(
 }
 
 #define BUF_SIZE 512
-rt_err_t HAL::SPI_Flash_FontLibUpdate(
-    const char *partiton_name,
-    const char *lib_path
-)
+int SPI_Flash_FontLibUpdate(int argc, char *argv[])
 {
-    rt_err_t ret = 0;
+    if (argc != 3)
+    {
+        rt_kprintf("Usage: %s <partition_name> <font_lib_path>\n", argv[0]);
+        return -1;
+    }
+
+    int ret = 0;
     uint32_t i, j, len;
     const struct fal_flash_dev *flash_dev = RT_NULL;
     const struct fal_partition *partition = RT_NULL;
 
     /*!< start to update chinese font libraries */
-    int fd = open(lib_path, O_RDONLY);
+    int fd = open(argv[2], O_RDONLY);
     if (fd < 0)
     {
         LOG_E("open fill failed, please check path is exist!");
-        ret = -RT_EINVAL;
+        ret = -1;
         return ret;
     }
     struct stat f_stat = {0};
@@ -80,17 +83,17 @@ rt_err_t HAL::SPI_Flash_FontLibUpdate(
 //    RT_ASSERT(buf);
 
     // 1. erase whole partition
-    if (!partiton_name)
+    if (!argv[1])
     {
         LOG_E("Input param partition name is null!");
-        return -1;
+        return -2;
     }
 
-    partition = fal_partition_find(partiton_name);
+    partition = fal_partition_find(argv[1]);
     if (partition == RT_NULL)
     {
-        LOG_E("Find partition (%s) failed!", partiton_name);
-        ret = -1;
+        LOG_E("Find partition (%s) failed!", argv[1]);
+        ret = -3;
         return ret;
     }
 
@@ -98,7 +101,7 @@ rt_err_t HAL::SPI_Flash_FontLibUpdate(
     if (flash_dev == RT_NULL)
     {
         LOG_E("Find flash device (%s) failed!", partition->flash_name);
-        ret = -1;
+        ret = -4;
         return ret;
     }
 
@@ -116,10 +119,10 @@ rt_err_t HAL::SPI_Flash_FontLibUpdate(
     if (ret < 0)
     {
         LOG_E("Partition (%s) erase failed!", partition->name);
-        ret = -1;
+        ret = -5;
         return ret;
     }
-    LOG_I("Erase (%s) partition finish!", partiton_name);
+    LOG_I("Erase (%s) partition finish!", argv[1]);
 
     char buf[BUF_SIZE] = {0};
     /* 循环读取整个分区的数据，并对内容进行检验 */
@@ -133,7 +136,7 @@ rt_err_t HAL::SPI_Flash_FontLibUpdate(
         if (ret < 0)
         {
             LOG_E("Partition (%s) read failed!", partition->name);
-            ret = -1;
+            ret = -6;
             return ret;
         }
         for (j = 0; j < len; j++)
@@ -142,7 +145,7 @@ rt_err_t HAL::SPI_Flash_FontLibUpdate(
             if (buf[j] != 0xFF)
             {
                 LOG_E("The erase operation did not really succeed!");
-                ret = -2;
+                ret = -7;
                 return ret;
             }
         }
@@ -170,17 +173,18 @@ rt_err_t HAL::SPI_Flash_FontLibUpdate(
         if (ret < 0)
         {
             LOG_E("Partition (%s) write failed!", partition->name);
-            ret = -3;
+            ret = -8;
             return ret;
         }
         total += rx;
     }
 
-    LOG_I("Write (%s) partition finish! Write size %d(%dK).", partiton_name, total, total / 1024);
+    LOG_I("Write (%s) partition finish! Write size %d(%dK).", argv[1], total, total / 1024);
 
     close(fd);
     return ret;
 }
+MSH_CMD_EXPORT_ALIAS(SPI_Flash_FontLibUpdate, spi_flash_update, update chinese font);
 
 void HAL::SPI_Flash_MountFS()
 {

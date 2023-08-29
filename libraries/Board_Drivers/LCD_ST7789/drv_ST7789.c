@@ -379,7 +379,6 @@ void LCD_Display_Dir(uint8_t dir)
 
 rt_err_t lcd_write_half_word(const rt_uint16_t da)
 {
-
     LCD_WR_DATA16(change_byte_order(da));
     return RT_EOK;
 }
@@ -476,7 +475,7 @@ void lcd_clear(rt_uint16_t color)
 void lcd_draw_point(rt_uint16_t x, rt_uint16_t y)
 {
     lcd_address_set(x, y, x, y);
-    lcd_write_half_word(BLUE);
+    lcd_write_half_word(WHITE);
 }
 
 rt_uint16_t change_byte_order(rt_uint16_t word)

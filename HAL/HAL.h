@@ -4,6 +4,7 @@
 
 #include "HAL_Def.h"
 #include <rtthread.h>
+#include <drv_gpio.h>
 
 namespace HAL
 {
@@ -35,8 +36,6 @@ namespace HAL
                             const char *dest_buf,
                             uint32_t start_offset,
                             uint16_t font_len);
-    rt_err_t SPI_Flash_FontLibUpdate(const char *partiton_name,
-                                     const char *lib_path);
 
     void show(uint16_t x, uint16_t y);
 }

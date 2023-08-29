@@ -27,8 +27,6 @@ static int myHAL_Init(void)
     HAL::SPI_Flash_MountFS();
 #endif
 
-    HAL::SPI_Flash_FontLibUpdate("font", "/sdcard/font/GBK24.Dzk");
-
 //    char buf[128] = {0};
 //    HAL::SPI_Flash_Read("font", buf, 0x7F4A0, 32);
 //    for (int i = 0; i < 32; i++)
