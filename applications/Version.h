@@ -35,6 +35,7 @@
 #define VERSION_NUM_TO_STR(n)   _VERSION_NUM_TO_STR_(n)
 
 /* LVGL Version */
+#if PKG_USING_LVGL
 #include "lvgl.h"
 #define VERSION_LVGL            "v"\
                                 VERSION_NUM_TO_STR(LVGL_VERSION_MAJOR)\
@@ -45,7 +46,7 @@
                                 " "\
                                 LVGL_VERSION_INFO
 
-
+#endif
 /* File System Version */
 #ifdef ARDUINO
 #  include "SdFat.h"

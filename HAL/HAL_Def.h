@@ -13,7 +13,7 @@ typedef enum
 } Button_ID_t;
 
 /* SD */
-typedef struct NovelInfo
+typedef struct Novel_Info
 {
     char path[64];
     char name[32];
@@ -21,14 +21,6 @@ typedef struct NovelInfo
     rt_off_t pages;
     rt_off_t offset;
 } NovelInfo_t;
-typedef struct Novel
-{
-    char path[32];
-    char name[16];
-    rt_off_t size;
-    rt_off_t current_page;
-    struct Novel *next;
-} Novel_t;
 
 /* LCD */
 typedef enum

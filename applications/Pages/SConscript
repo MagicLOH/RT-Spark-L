@@ -7,17 +7,22 @@ group = []
 src = Glob('*.cpp')
 CPPPATH = [cwd]
 
-src += Glob('_Template/*.cpp')
-CPPPATH += [cwd + '/_Template']
+if GetDepend(['PKG_USING_LVGL']):
+    src += Glob('_Template/*.cpp')
+    CPPPATH += [cwd + '/_Template']
 
-src += Glob('Dialplate/*.cpp')
-CPPPATH += [cwd + '/Dialplate']
+    src += Glob('Dialplate/*.cpp')
+    CPPPATH += [cwd + '/Dialplate']
 
-src += Glob('StartUp/*.cpp')
-CPPPATH += [cwd + '/StartUp']
+    src += Glob('StartUp/*.cpp')
+    CPPPATH += [cwd + '/StartUp']
 
-src += Glob('SystemInfos/*.cpp')
-CPPPATH += [cwd + '/SystemInfos']
+    src += Glob('SystemInfos/*.cpp')
+    CPPPATH += [cwd + '/SystemInfos']
+
+if GetDepend(['BSP_USING_ONBOARD_LCD']):
+    src += Glob('Reader/*.cpp')
+    CPPPATH += [cwd + '/Reader']
 
 list = os.listdir(cwd)
 for d in list:
@@ -25,6 +30,6 @@ for d in list:
     if os.path.isfile(os.path.join(path, 'SConscript')):
         group = group + SConscript(os.path.join(d, 'SConscript'))
 
-group = group + DefineGroup('Pages', src, depend = ['PKG_USING_LVGL'], CPPPATH = CPPPATH)
+group = group + DefineGroup('Pages', src, depend = [''], CPPPATH = CPPPATH)
 
 Return('group')

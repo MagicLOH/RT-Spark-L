@@ -5,7 +5,7 @@
 #define DBG_LVL DBG_LOG
 #include <rtdbg.h>
 
-#if 0
+#if PKG_USING_LVGL
 #include <lvgl.h>
 #include "PageManager.h"
 #include "AppFactory.h"
@@ -16,7 +16,7 @@
  */
 void App_Init()
 {
-#if 0
+#if PKG_USING_LVGL
     static AppFactory factory;
     static PageManager manager(&factory);
 
