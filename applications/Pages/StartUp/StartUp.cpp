@@ -19,7 +19,7 @@ void Startup::onCustomAttrConfig()
 
 void Startup::onViewLoad()
 {
-//    Model.Init();
+    Model.Init();
 //    Model.SetEncoderEnable(false);
     View.Create(_root);
     lv_timer_t *timer = lv_timer_create(onTimer, 2000, this);
@@ -48,14 +48,14 @@ void Startup::onViewWillDisappear()
 
 void Startup::onViewDidDisappear()
 {
-//    Model.SetStatusBarAppear(true);
+    Model.SetStatusBarAppear(true);
 }
 
 void Startup::onViewUnload()
 {
     View.Delete();
 //    Model.SetEncoderEnable(true);
-//    Model.Deinit();
+    Model.Deinit();
 }
 
 void Startup::onViewDidUnload()
