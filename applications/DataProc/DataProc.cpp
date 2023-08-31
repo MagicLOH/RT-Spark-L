@@ -1,11 +1,11 @@
 #include "DataProc.h"
-#include "../HAL/HAL.h"
+#include "HAL.h"
 
 static DataCenter center("CENTER");
 
-DataCenter* DataProc::Center()
+DataCenter *DataProc::Center()
 {
-    return &center;
+	return &center;
 }
 
 void DataProc_Init()

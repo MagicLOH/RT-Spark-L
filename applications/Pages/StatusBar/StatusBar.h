@@ -20,30 +20,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+#ifndef __STATUS_BAR_H
+#define __STATUS_BAR_H
 
-#include "AppFactory.h"
-#include "Template.h"
-#include "StartUp.h"
-#include "SystemInfos.h"
+#include "lvgl.h"
 
-#define APP_CLASS_MATCH(className)\
-do{\
-    if (strcmp(name, #className) == 0)\
-    {\
-        return new Page::className;\
-    }\
-}while(0)
-
-/**
- * @brief called when PageManager::Install calling
- * @param name
- * @return
- */
-PageBase *AppFactory::CreatePage(const char *name)
+namespace Page
 {
-	APP_CLASS_MATCH(Template);
-	APP_CLASS_MATCH(SystemInfos);
-	APP_CLASS_MATCH(Startup);
 
-	return nullptr;
+	lv_obj_t *StatusBar_Create(lv_obj_t *par);
+
 }
+
+#endif

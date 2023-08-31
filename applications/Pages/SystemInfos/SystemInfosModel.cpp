@@ -6,16 +6,16 @@ using namespace Page;
 void SystemInfosModel::Init()
 {
 #if 0
-    account = new Account("SystemInfosModel", DataProc::Center(), 0, this);
+	account = new Account("SystemInfosModel", DataProc::Center(), 0, this);
 
-    account->Subscribe("SportStatus");
-    account->Subscribe("GPS");
-    account->Subscribe("MAG");
-    account->Subscribe("IMU");
-    account->Subscribe("Clock");
-    account->Subscribe("Power");
-    account->Subscribe("Storage");
-    account->Subscribe("StatusBar");
+	account->Subscribe("SportStatus");
+	account->Subscribe("GPS");
+	account->Subscribe("MAG");
+	account->Subscribe("IMU");
+	account->Subscribe("Clock");
+	account->Subscribe("Power");
+	account->Subscribe("Storage");
+	account->Subscribe("StatusBar");
 #endif
 }
 
@@ -29,9 +29,9 @@ void SystemInfosModel::Deinit()
 }
 
 void SystemInfosModel::GetSportInfo(
-    float *trip,
-    char *time, uint32_t len,
-    float *maxSpd
+	float *trip,
+	char *time, uint32_t len,
+	float *maxSpd
 )
 {
 //    HAL::SportStatus_Info_t sport = {0};
@@ -42,12 +42,12 @@ void SystemInfosModel::GetSportInfo(
 }
 
 void SystemInfosModel::GetGPSInfo(
-    float *lat,
-    float *lng,
-    float *alt,
-    char *utc, uint32_t len,
-    float *course,
-    float *speed
+	float *lat,
+	float *lng,
+	float *alt,
+	char *utc, uint32_t len,
+	float *course,
+	float *speed
 )
 {
 //    HAL::GPS_Info_t gps = {0};
@@ -70,10 +70,10 @@ void SystemInfosModel::GetGPSInfo(
 }
 
 void SystemInfosModel::GetMAGInfo(
-    float *dir,
-    int *x,
-    int *y,
-    int *z
+	float *dir,
+	int *x,
+	int *y,
+	int *z
 )
 {
 //    HAL::MAG_Info_t mag = {0};
@@ -87,8 +87,8 @@ void SystemInfosModel::GetMAGInfo(
 }
 
 void SystemInfosModel::GetIMUInfo(
-    int *step,
-    char *info, uint32_t len
+	int *step,
+	char *info, uint32_t len
 )
 {
 //    HAL::IMU_Info_t imu = {0};
@@ -109,7 +109,7 @@ void SystemInfosModel::GetIMUInfo(
 }
 
 void SystemInfosModel::GetRTCInfo(
-    char *dateTime, uint32_t len
+	char *dateTime, uint32_t len
 )
 {
 //    HAL::Clock_Info_t clock = {0};
@@ -128,9 +128,9 @@ void SystemInfosModel::GetRTCInfo(
 }
 
 void SystemInfosModel::GetBatteryInfo(
-    int *usage,
-    float *voltage,
-    char *state, uint32_t len
+	int *usage,
+	float *voltage,
+	char *state, uint32_t len
 )
 {
 //    HAL::Power_Info_t power = {0};
@@ -142,9 +142,9 @@ void SystemInfosModel::GetBatteryInfo(
 }
 
 void SystemInfosModel::GetStorageInfo(
-    bool *detect,
-    const char **type,
-    char *usage, uint32_t len
+	bool *detect,
+	const char **type,
+	char *usage, uint32_t len
 )
 {
 //    DataProc::Storage_Basic_Info_t info = {0};

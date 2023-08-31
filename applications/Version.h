@@ -35,7 +35,7 @@
 #define VERSION_NUM_TO_STR(n)   _VERSION_NUM_TO_STR_(n)
 
 /* LVGL Version */
-#if PKG_USING_LVGL
+#ifdef PKG_USING_LVGL
 #include "lvgl.h"
 #define VERSION_LVGL            "v"\
                                 VERSION_NUM_TO_STR(LVGL_VERSION_MAJOR)\
@@ -75,6 +75,5 @@
 
 /* Build Time */
 #define VERSION_BUILD_TIME    __DATE__ "\n" __TIME__
-
 
 #endif

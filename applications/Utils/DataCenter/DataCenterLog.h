@@ -27,8 +27,9 @@
 
 #if !defined(ARDUINO) && DATA_CENTER_USE_LOG
 #include <stdio.h>
+#include <rtthread.h>
 #  define _DC_LOG(format, ...)      rt_kprintf("[DC]" format "\r\n", ##__VA_ARGS__)
-#  define DC_LOG_INFO(format, ...)  //_DC_LOG("[Info] "format, ##__VA_ARGS__)
+#  define DC_LOG_INFO(format, ...)  _DC_LOG("[Info] " format, ##__VA_ARGS__)
 #  define DC_LOG_WARN(format, ...)  _DC_LOG("[Warn] " format, ##__VA_ARGS__)
 #  define DC_LOG_ERROR(format, ...) _DC_LOG("[Error] " format, ##__VA_ARGS__)
 #else

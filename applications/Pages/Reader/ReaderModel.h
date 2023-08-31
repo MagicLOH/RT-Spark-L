@@ -1,69 +1,74 @@
 #ifndef __READER_MODEL_H
 #define __READER_MODEL_H
 
-#ifdef PKG_USING_LVGL
-#include "lvgl.h"
-#endif
-
 extern "C"
 {
 #include "drv_st7789.h"
 }
 
+#include <rtthread.h>
 #include "HAL.h"
 
-#define MAX_FONT_COUNT (LCD_W * (LCD_H - CHN_FONT_24x24) / CHN_FONT_24x24)
+#ifdef PKG_USING_LVGL
+#include <lvgl.h>
+#include "Account.h"
+#endif
+
+const int MAX_TITLE_LEN = 32;
+const int MAX_FONTS_DISP = LCD_W * (LCD_H - CHN_FONT_24x24) / CHN_FONT_24x24 * 2;
 
 namespace Page
 {
-    class ReaderModel
-    {
-    public:
-        typedef enum
-        {
-            EVENT_NEXT_PAGE, // go to next page
-            EVENT_PREV_PAGE, // go to preview page
-            EVENT_EXIT       // exit to novel library
-        } EventCode_t;
+	class ReaderModel
+	{
+	public:
+		struct NovelInfo
+		{
+			const char *Name;       // novel name
+			const char *Path;       // novel file path
+			uint32_t FileSize;      // novel file size
+			uint32_t TotalFonts;    // novel total font count
+			uint32_t TotalPages;    // total novel pages (assemble)
+			uint32_t RealPages;     // calculate result
+		};
 
-        struct NovelInfo
-        {
-            const char *Name;       // novel name
-            const char *Path;       // novel file path
-            uint32_t FileSize;      // novel file size
-        };
+		/* Page List */
+		struct PageList
+		{
+			uint8_t status;
 
-        /* Page List */
-        struct PageList
-        {
-            uint32_t PageIndex;             // current page index
-            uint16_t FontCount;             // current total font number in one page
-            char Context[MAX_FONT_COUNT];   // MAX contain chinese font
-            struct PageList *next;
-            struct PageList *prev;
-        };
+			uint16_t FontCount;                 // current total font number in one page
+			char Context[MAX_FONTS_DISP];       // MAX contain chinese font
+		};
 
-        /* Event call back pointer */
-        typedef void (*EventCallback_t)(ReaderModel *novel);
+	public:
+		ReaderModel();
+		~ReaderModel();
 
-    public:
-        ReaderModel::ReaderModel();
-        ~ReaderModel();
+	public:
+		void Init();
+		void Deinit();
 
-    public:
-        uint32_t getNovelFileSize(const char *path);
-        uint16_t getAPageFontCount();
-        PageList *ReaderModel::getPage(uint32_t index);
+		uint32_t getFileSize(int fd);
+		uint16_t getAPageFontCount();
+		PageList *getPage(uint32_t index);
 
-        PageList *loadNovel(const char *path, const char *name);
-        PageList *toNextPage();
-        PageList *toPrevPage();
+		bool loadNovel(const char *path, const char *name);
+		void toNextPage();
+		void toPrevPage();
 
-    private:
-        PageList *_RootNode;  // root node for whole novel
-        NovelInfo *novel_info;
+		bool isLoaded(const char *name) const; // judge is load by novel's name
+		bool isBusy();
 
-    };
+	public:
+		PageList *_RootList;  // root list for whole novel
+		uint32_t m_nOldIndex;
+		uint32_t m_nCurrentIndex;
+		NovelInfo *m_novel_info;
+
+	private:
+		Account *account;
+	};
 }
 
 #endif

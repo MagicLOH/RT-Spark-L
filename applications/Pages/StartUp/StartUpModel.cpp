@@ -2,12 +2,11 @@
 
 using namespace Page;
 
-#if 0
 void StartupModel::Init()
 {
-//    account = new Account("StartupModel", DataProc::Center(), 0, this);
-//    account->Subscribe("MusicPlayer");
-//    account->Subscribe("StatusBar");
+//	account = new Account("StartupModel", DataProc::Center(), 0, this);
+//	account->Subscribe("MusicPlayer");
+//	account->Subscribe("StatusBar");
 }
 
 void StartupModel::Deinit()
@@ -35,4 +34,3 @@ void StartupModel::SetStatusBarAppear(bool en)
 //    info.param.appear = en;
 //    account->Notify("StatusBar", &info, sizeof(info));
 }
-#endif
