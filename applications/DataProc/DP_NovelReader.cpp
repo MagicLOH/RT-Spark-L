@@ -7,18 +7,22 @@ static void onNotify(Account *account, NovelReader_Info_t *info)
 {
 	switch (info->cmd)
 	{
-	case NOVEL_READER_CMD_CHANGE:
-		HAL::LCD_ShowString(0,
-		                    CHN_FONT_24x24,
-		                    CHN_FONT_24x24,
-		                    "%s",
-		                    info->NovelContext);
-		break;
+		case NOVEL_READER_CMD_SHOW:
+		{
+			RT_ASSERT(info->NovelContext);
+			HAL::LCD_ShowString(0,
+			                    CHN_FONT_24x24,
+			                    CHN_FONT_24x24,
+			                    "%s",
+			                    info->NovelContext);
+			delete info->NovelContext;
+		}
+			break;
 
-	case NOVEL_READER_CMD_EXIT:
-		break;
-	case NOVEL_READER_CMD_BACK:
-		break;
+		case NOVEL_READER_CMD_EXIT:
+			break;
+		case NOVEL_READER_CMD_BACK:
+			break;
 	}
 }
 

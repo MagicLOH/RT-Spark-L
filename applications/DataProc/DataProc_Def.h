@@ -58,7 +58,7 @@ namespace DataProc
 	/* NovelReader */
 	typedef enum
 	{
-		NOVEL_READER_CMD_CHANGE, // exit to main menu
+		NOVEL_READER_CMD_SHOW, // show string
 		NOVEL_READER_CMD_EXIT, // exit to main menu
 		NOVEL_READER_CMD_BACK, // back to bookshelf
 	} NovelReader_Cmd_t;

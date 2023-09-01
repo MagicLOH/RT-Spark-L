@@ -12,10 +12,12 @@ extern "C"
 #ifdef PKG_USING_LVGL
 #include <lvgl.h>
 #include "Account.h"
+#include "DataProc_Def.h"
 #endif /* PKG_USING_LVGL */
 
 const int MAX_TITLE_LEN = 32;
-const int MAX_FONTS_DISP = LCD_W * (LCD_H - CHN_FONT_24x24) / CHN_FONT_24x24 * 2;
+const int MAX_FONTS_DISP = (LCD_W / CHN_FONT_24x24) * ((LCD_H - CHN_FONT_24x24) / CHN_FONT_24x24);
+const int MAX_CHARS_DISP = (LCD_W / (CHN_FONT_24x24 / 2)) * ((LCD_H - CHN_FONT_24x24) / CHN_FONT_24x24);
 
 namespace Page
 {

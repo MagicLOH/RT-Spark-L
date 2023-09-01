@@ -123,13 +123,12 @@ void ReaderModel::toNextPage()
 		LOG_D("root list had not be created!");
 		return;
 	}
+
 	DataProc::NovelReader_Info_t info;
 	DATA_PROC_INIT_STRUCT(info);
 	info.NovelName = m_NovelInfo->Name;
-	info.cmd = DataProc::NOVEL_READER_CMD_CHANGE;
-	rt_memcpy(info.NovelContext,
-	          _RootList[m_nCurrentIndex].Context,
-	          rt_strlen(_RootList[m_nCurrentIndex].Context) + 1);
+	info.cmd = DataProc::NOVEL_READER_CMD_SHOW;
+	info.NovelContext = new char[MAX_FONTS_DISP];
 
 	m_nOldIndex = m_nCurrentIndex;
 	if (m_nCurrentIndex >= 0)
@@ -138,6 +137,9 @@ void ReaderModel::toNextPage()
 	}
 	if (m_nCurrentIndex != m_nOldIndex)
 	{
+		rt_memcpy(info.NovelContext,
+		          _RootList[m_nCurrentIndex].Context,
+		          rt_strlen(_RootList[m_nCurrentIndex].Context));
 		account->Notify("NovelReader", &info, sizeof(info));
 	}
 }
@@ -149,13 +151,12 @@ void ReaderModel::toPrevPage()
 		LOG_D("root list had not be created!");
 		return;
 	}
+
 	DataProc::NovelReader_Info_t info;
 	DATA_PROC_INIT_STRUCT(info);
 	info.NovelName = m_NovelInfo->Name;
-	info.cmd = DataProc::NOVEL_READER_CMD_CHANGE;
-	rt_memcpy(info.NovelContext,
-	          _RootList[m_nCurrentIndex].Context,
-	          rt_strlen(_RootList[m_nCurrentIndex].Context) + 1);
+	info.cmd = DataProc::NOVEL_READER_CMD_SHOW;
+	info.NovelContext = new char[MAX_FONTS_DISP];
 
 	if (m_nCurrentIndex != m_nOldIndex)
 	{
@@ -163,8 +164,11 @@ void ReaderModel::toPrevPage()
 		if (m_nCurrentIndex > 0)
 		{
 			m_nCurrentIndex--;
+			rt_memcpy(info.NovelContext,
+			          _RootList[m_nCurrentIndex].Context,
+			          rt_strlen(_RootList[m_nCurrentIndex].Context));
+			account->Notify("NovelReader", &info, sizeof(info));
 		}
-		account->Notify("NovelReader", &info, sizeof(info));
 	}
 
 }
@@ -194,7 +198,7 @@ bool ReaderModel::isLoaded(const char *name) const
 	    && nullptr != _RootList
 	    && nullptr != m_NovelInfo->Name)
 	{
-		
+
 		return true;
 	}
 

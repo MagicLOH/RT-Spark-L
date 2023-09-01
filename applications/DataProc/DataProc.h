@@ -1,7 +1,7 @@
 #ifndef __DATA_PROC_H
 #define __DATA_PROC_H
 
-#include "Utils/DataCenter/DataCenter.h"
+#include "DataCenter.h"
 #include "HAL_Def.h"
 #include "DataProc_Def.h"
 
