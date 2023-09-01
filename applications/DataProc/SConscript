@@ -13,6 +13,6 @@ for d in list:
     if os.path.isfile(os.path.join(path, 'SConscript')):
         group = group + SConscript(os.path.join(d, 'SConscript'))
 
-group = group + DefineGroup('Pages', src, depend = ['PKG_USING_LVGL'], CPPPATH = CPPPATH)
+group = group + DefineGroup('DataProc', src, depend = ['PKG_USING_LVGL'], CPPPATH = CPPPATH)
 
 Return('group')

@@ -12,7 +12,7 @@ extern "C"
 #ifdef PKG_USING_LVGL
 #include <lvgl.h>
 #include "Account.h"
-#endif
+#endif /* PKG_USING_LVGL */
 
 const int MAX_TITLE_LEN = 32;
 const int MAX_FONTS_DISP = LCD_W * (LCD_H - CHN_FONT_24x24) / CHN_FONT_24x24 * 2;
@@ -64,7 +64,7 @@ namespace Page
 		PageList *_RootList;  // root list for whole novel
 		uint32_t m_nOldIndex;
 		uint32_t m_nCurrentIndex;
-		NovelInfo *m_novel_info;
+		NovelInfo *m_NovelInfo;
 
 	private:
 		Account *account;
