@@ -40,6 +40,7 @@ ReaderModel::~ReaderModel()
 void ReaderModel::Init()
 {
 	account = new Account("ReaderModel", DataProc::Center(), 0, this);
+	account->Subscribe("NovelReader");
 }
 
 void ReaderModel::Deinit()
@@ -59,7 +60,7 @@ bool ReaderModel::loadNovel(const char *path, const char *name)
 	RT_ASSERT(name);
 	if (isLoaded(name))
 	{
-		LOG_W("%s is already loaded!", name);
+		LOG_W("%s was already loaded!", name);
 		return false;
 	}
 
@@ -122,6 +123,13 @@ void ReaderModel::toNextPage()
 		LOG_D("root list had not be created!");
 		return;
 	}
+	DataProc::NovelReader_Info_t info;
+	DATA_PROC_INIT_STRUCT(info);
+	info.NovelName = m_NovelInfo->Name;
+	info.cmd = DataProc::NOVEL_READER_CMD_CHANGE;
+	rt_memcpy(info.NovelContext,
+	          _RootList[m_nCurrentIndex].Context,
+	          rt_strlen(_RootList[m_nCurrentIndex].Context) + 1);
 
 	m_nOldIndex = m_nCurrentIndex;
 	if (m_nCurrentIndex >= 0)
@@ -130,11 +138,7 @@ void ReaderModel::toNextPage()
 	}
 	if (m_nCurrentIndex != m_nOldIndex)
 	{
-		lcd_show_string(0,
-		                CHN_FONT_24x24,
-		                CHN_FONT_24x24,
-		                "%s",
-		                _RootList[m_nCurrentIndex].Context);
+		account->Notify("NovelReader", &info, sizeof(info));
 	}
 }
 
@@ -145,6 +149,14 @@ void ReaderModel::toPrevPage()
 		LOG_D("root list had not be created!");
 		return;
 	}
+	DataProc::NovelReader_Info_t info;
+	DATA_PROC_INIT_STRUCT(info);
+	info.NovelName = m_NovelInfo->Name;
+	info.cmd = DataProc::NOVEL_READER_CMD_CHANGE;
+	rt_memcpy(info.NovelContext,
+	          _RootList[m_nCurrentIndex].Context,
+	          rt_strlen(_RootList[m_nCurrentIndex].Context) + 1);
+
 	if (m_nCurrentIndex != m_nOldIndex)
 	{
 		m_nOldIndex = m_nCurrentIndex;
@@ -152,11 +164,7 @@ void ReaderModel::toPrevPage()
 		{
 			m_nCurrentIndex--;
 		}
-		lcd_show_string(0,
-		                CHN_FONT_24x24,
-		                CHN_FONT_24x24,
-		                "%s",
-		                _RootList[m_nCurrentIndex].Context);
+		account->Notify("NovelReader", &info, sizeof(info));
 	}
 
 }
@@ -186,7 +194,7 @@ bool ReaderModel::isLoaded(const char *name) const
 	    && nullptr != _RootList
 	    && nullptr != m_NovelInfo->Name)
 	{
-		LOG_I("%s was already loaded.", name);
+		
 		return true;
 	}
 

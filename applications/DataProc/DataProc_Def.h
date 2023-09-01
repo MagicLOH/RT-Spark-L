@@ -5,7 +5,6 @@
 
 namespace DataProc
 {
-
 	/* StatusBar */
 	typedef enum
 	{
@@ -59,8 +58,7 @@ namespace DataProc
 	/* NovelReader */
 	typedef enum
 	{
-		NOVEL_READER_CMD_NEXT, // go to next page
-		NOVEL_READER_CMD_PREV, // go to prev page
+		NOVEL_READER_CMD_CHANGE, // exit to main menu
 		NOVEL_READER_CMD_EXIT, // exit to main menu
 		NOVEL_READER_CMD_BACK, // back to bookshelf
 	} NovelReader_Cmd_t;
@@ -68,7 +66,8 @@ namespace DataProc
 	typedef struct
 	{
 		NovelReader_Cmd_t cmd;
-		char novelName[32];
+		const char *NovelName;
+		char *NovelContext;
 	} NovelReader_Info_t;
 
 }
