@@ -1,11 +1,12 @@
 #include "DataProc.h"
 #include "HAL.h"
 
+// an instance object(CENTER), will be created very early
 static DataCenter center("CENTER");
 
 DataCenter *DataProc::Center()
 {
-	return &center;
+    return &center;
 }
 
 void DataProc_Init()

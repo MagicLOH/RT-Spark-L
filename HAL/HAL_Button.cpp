@@ -8,6 +8,9 @@
 #define DBG_LVL DBG_LOG
 #include "rtdbg.h"
 
+#include "ReaderModel.h"
+
+
 static rt_bool_t s_btnActiveStatus = 0;
 static uint8_t s_btn_id = 0;
 
@@ -62,6 +65,10 @@ uint8_t HAL::Button_GetID()
     return s_btn_id;
 }
 
+using namespace Page;
+
+ReaderModel reader;
+
 void HAL::Button_onPressed(void *arg)
 {
     struct Button *button = (struct Button *)arg;
@@ -73,12 +80,13 @@ void HAL::Button_onPressed(void *arg)
         {
             LOG_I("btnUp press down.");
             // send key value to queue
+            reader.toPrevPage();
             break;
         }
         case btnDown_id:
         {
             LOG_I("btnDown_id press down.");
-            // send key value
+            reader.toNextPage();
             break;
         }
         case btnLeft_id:
@@ -193,4 +201,6 @@ void HAL::Button_Init(void)
     button_start(&st_btnDown);
     button_start(&st_btnRight);
     button_start(&st_btnLeft);
+    
+    reader.loadNovel("/sdcard/novels/bullshit.txt", "bullshit");
 }

@@ -106,8 +106,11 @@ static void keypad_read(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
             case btnDown_id:
                 act_key = LV_KEY_PREV;
                 break;
-            case btnLeft_id:
+            case btnRight_id:
                 act_key = LV_KEY_ENTER;
+                break;
+            case btnLeft_id:
+                act_key = LV_KEY_ESC;
                 break;
         }
 

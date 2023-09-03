@@ -22,6 +22,8 @@ do{ \
 }while(0)
 
 #endif /* PKG_USING_LVGL */
+
+
 /**
  * @brief Applications Init Entry
  */
@@ -75,6 +77,7 @@ void App_Init()
 
     manager.Push("Pages/Startup"); // default display page
 #endif
+
 
     LOG_I("App_Init done.");
 }

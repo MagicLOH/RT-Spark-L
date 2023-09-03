@@ -35,8 +35,6 @@ static int myHAL_Init(void)
 //    }
 //    rt_kprintf("\n");
 
-    HAL::LCD_ShowString(0, 0, CHN_FONT_24x24, "%s", "жа");
-
     LOG_I("myHAL_Init done.");
     return 0;
 }
