@@ -10,15 +10,10 @@
 #ifndef __DRV_LCD_H
 #define __DRV_LCD_H
 #include <rtthread.h>
-#include "rtdevice.h"
+#include <rtdevice.h>
 #include <drv_common.h>
 #ifdef PKG_USING_QRCODE
 #include <qrcode.h>
-#endif
-
-#ifdef __cplusplus
-extern "C"
-{
 #endif
 
 //0000 0000 0000 0011 1111 1111 1111 1110
@@ -116,8 +111,5 @@ void lcd_display_off(void);
 // for lvgl
 void lcd_fill_array(rt_uint16_t x_start, rt_uint16_t y_start, rt_uint16_t x_end, rt_uint16_t y_end, void *pcolor);
 
-#ifdef __cplusplus
-}
-#endif
 
 #endif

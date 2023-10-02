@@ -1,5 +1,6 @@
 #include "ReaderModel.h"
 
+#include <vector>
 #include <rtthread.h>
 #include <unistd.h>
 #include <dfs.h>
@@ -11,9 +12,9 @@
 #define DBG_LVL DBG_LOG
 #include <rtdbg.h>
 
-extern "C" {
+extern "C"
+{
 #include "drv_st7789.h"
-
 }
 
 using namespace Page;
@@ -81,7 +82,7 @@ bool ReaderModel::loadNovel(const char *path, const char *name)
         return false;
     }
 
-    _Cache = new PageList[MAX_DISP_PAGES];
+    _Cache = new PageList[512];
     RT_ASSERT(_Cache);
 
     off_t file_size = getFileSize(fd);

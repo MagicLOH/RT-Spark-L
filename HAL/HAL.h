@@ -8,35 +8,36 @@
 
 namespace HAL
 {
-	void HAL_Update();
+void HAL_Update();
 
-	/* RTC */
-	void RTC_Init();
-	void RTC_Update();
+/* RTC */
+void RTC_Init();
+void RTC_Update();
 
-	/* Button */
-	void Button_Init();
-	void Button_Update();
-	uint8_t Button_GetID();
-	void Button_onPressed(void *);
-	void Button_onReleased(void *);
-	void Button_onLongPressing(void *);
+/* Button */
+void Button_Init();
+void Button_Update();
+uint8_t Button_GetID();
+void Button_onPressed(void *);
+void Button_onReleased(void *);
+void Button_onLongPressing(void *);
 
-	/* SDCard */
-	void SD_MountFS();
-	void SD_FontLib_Update(const char *path);
+/* SDCard */
+void SD_MountFS();
+void SD_FontLib_Update(const char *path);
 
-	/* LCD */
-	rt_err_t LCD_ShowString(rt_uint16_t x, rt_uint16_t y, rt_uint32_t size, const char *fmt, ...);
+/* LCD */
+rt_err_t LCD_ShowString(rt_uint16_t x, rt_uint16_t y, rt_uint32_t size, const char *fmt, ...);
+void LCD_Clean(rt_uint16_t color);
 
-	/* External Flash (W25Q64) */
-	void SPI_Flash_MountFS();
-	rt_err_t SPI_Flash_Read(const char *partiton_name,
-	                        const char *dest_buf,
-	                        uint32_t start_offset,
-	                        uint16_t font_len);
+/* External Flash (W25Q64) */
+void SPI_Flash_MountFS();
+rt_err_t SPI_Flash_Read(const char *partiton_name,
+						const char *dest_buf,
+						uint32_t start_offset,
+						uint16_t font_len);
 
-	void show(uint16_t x, uint16_t y);
+void show(uint16_t x, uint16_t y);
 }
 
 void lcd_draw_circle(rt_uint16_t x0, rt_uint16_t y0, rt_uint8_t r);

@@ -13,12 +13,19 @@
 #define DBG_LVL DBG_LOG
 #include <rtdbg.h>
 
-/**========================
- *   main function entry
- *=========================*/
+#include "App.h"
+
+
 int main(void)
 {
-    
-    return 0;
+
+#ifndef PKG_USING_LVGL
+
+	App_Init();
+
+#endif
+
+
+	return 0;
 }
 

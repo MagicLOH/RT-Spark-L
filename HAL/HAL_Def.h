@@ -23,11 +23,17 @@ typedef struct
 } File_Info_t;
 
 /* LCD */
-typedef enum
-{
-	CHN_FONT_16x16 = 16,
-	CHN_FONT_24x24 = 24,
-	CHN_FONT_32x32 = 32,
-} LCD_FontSize_t;
+#define LCD_WIDTH (240)
+#define LCD_HEIGHT (240)
+
+#define CHN_FONT_16x16 (16)
+#define CHN_FONT_24x24 (24)
+#define CHN_FONT_32x32 (32)
+
+// #define MAX_CHARS_DISP 30
+#define MAX_LINE_SIZE ((LCD_WIDTH) / (CHN_FONT_24x24 / 2))
+#define MAX_COLUMN_SIZE (((LCD_HEIGHT - CHN_FONT_24x24)) / (CHN_FONT_24x24))
+
+#define MAX_CHARS_DISP ((MAX_LINE_SIZE) * (MAX_COLUMN_SIZE))
 
 #endif
