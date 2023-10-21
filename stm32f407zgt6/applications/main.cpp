@@ -11,7 +11,6 @@
 int main(void)
 {
 	int count =  1;
-	
 	rt_pin_mode(GPIO_LED_B, PIN_MODE_OUTPUT);
 
 	while (count++)
