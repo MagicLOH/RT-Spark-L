@@ -1,0 +1,21 @@
+from building import *
+import os
+
+cwd     = GetCurrentDir()
+CPPPATH = [cwd]
+
+src = Glob('main.cpp')
+src += Glob('app.cpp')
+
+if rtconfig.PLATFORM in ['armcc', 'armclang']:
+    src += ['armv6O0fix.c']
+
+group = DefineGroup('Applications', src, depend = [''], CPPPATH = CPPPATH)
+
+list = os.listdir(cwd)
+for item in list:
+    if os.path.isfile(os.path.join(cwd, item, 'SConscript')):
+        group = group + SConscript(os.path.join(item, 'SConscript'))
+
+Return('group')
+

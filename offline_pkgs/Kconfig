@@ -1,0 +1,68 @@
+menu "RT-Thread offline packages"
+
+menuconfig OFFLINE_PKG_USING_MULTIBUTTON
+	bool "Enable Multibutton package"
+    default n
+    if OFFLINE_PKG_USING_MULTIBUTTON
+        config MULTIBUTTON_USING_EXAMPLE_CALLBACK
+            bool "Enable async example"
+            default n
+        config MULTIBUTTON_USING_EXAMPLE_POLL
+            bool "Enable inquire example"
+            default n
+    endif
+
+# Kconfig file for package LVGL
+menuconfig OFFLINE_PKG_USING_LVGL
+    bool "LVGL (official): Light and Versatile Graphics Library"
+    depends on RT_VER_NUM >= 0x40100
+    default n
+
+if OFFLINE_PKG_USING_LVGL
+
+    config OFFLINE_PKG_LVGL_PATH
+        string
+        default "/packages/multimedia/LVGL/LVGL"
+
+    config OFFLINE_PKG_LVGL_THREAD_PRIO
+        int "Priority of LVGL thread"
+        default 20
+
+    config OFFLINE_PKG_LVGL_THREAD_STACK_SIZE
+        int "Stack size of LVGL thread"
+        default 4096
+
+    config OFFLINE_PKG_LVGL_DISP_REFR_PERIOD
+        int "Display refresh period (ms)"
+        default 5 # official suggestion
+
+    config OFFLINE_PKG_USING_LVGL_SQUARELINE
+        bool "Support SquareLine Studio"
+        default n
+
+    config OFFLINE_PKG_LVGL_USING_EXAMPLES
+        bool "Enable built-in examples"
+        default n
+
+    config OFFLINE_PKG_LVGL_USING_DEMOS
+        bool "Enable built-in demos"
+        default n
+
+    choice
+        prompt "Version"
+
+        default OFFLINE_PKG_LVGL_USING_V08035
+            bool "v8.3.5"
+    endchoice
+
+    config OFFLINE_PKG_LVGL_VER_NUM
+        hex
+        default 0x080305    if PKG_LVGL_USING_V08035
+
+    config OFFLINE_PKG_LVGL_VER
+       string
+       default "v8.3.5"         if PKG_LVGL_VER_NUM = 0x080305
+
+endif
+
+endmenu

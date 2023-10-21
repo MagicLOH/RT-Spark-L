@@ -24,12 +24,6 @@ STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_rng.c
 STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_gpio.c
 ''')
 
-if rtconfig.PLATFORM in ['gcc']:
-    src += ['CMSIS/Device/ST/STM32F4xx/Source/Templates/gcc/startup_stm32f407xx.s']
-elif rtconfig.PLATFORM in ['armcc', 'armclang']:
-    src += ['CMSIS/Device/ST/STM32F4xx/Source/Templates/arm/startup_stm32f407xx.s']
-elif rtconfig.PLATFORM in ['iccarm']:
-    src += ['CMSIS/Device/ST/STM32F4xx/Source/Templates/iar/startup_stm32f407xx.s']
     
 if GetDepend(['RT_USING_SERIAL']):
     src += ['STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c']

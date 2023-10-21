@@ -1,0 +1,36 @@
+import os
+import rtconfig
+from building import *
+
+Import('SDK_LIB')
+
+cwd = GetCurrentDir()
+
+# add general drivers
+src = []
+path =  [cwd]
+
+# Flash Abstract Layer
+if GetDepend(['BSP_USING_FAL']):
+    src += Glob('fal/*.c')
+    path += [cwd + '/fal']
+
+# lvgl
+if GetDepend(['PKG_USING_LVGL']):
+    src += Glob('lvgl/*.c')
+    path += [cwd + '/lvgl']
+
+# easyflash
+if GetDepend(['BSP_USING_EASYFLASH']):
+    src += Glob('easyflash/*.c')
+    path += [cwd + '/easyflash']
+
+CPPDEFINES = ['STM32F407xx']
+group = DefineGroup('ports', src, depend = [''], CPPPATH = path, CPPDEFINES = CPPDEFINES)
+
+list = os.listdir(cwd)
+for item in list:
+    if os.path.isfile(os.path.join(cwd, item, 'SConscript')):
+        group = group + SConscript(os.path.join(item, 'SConscript'))
+
+Return('group')

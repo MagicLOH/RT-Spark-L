@@ -1,0 +1,42 @@
+import os
+import rtconfig
+from building import *
+
+Import('SDK_LIB')
+
+cwd = GetCurrentDir()
+
+# add general drivers
+src = []
+path =  [cwd]
+src += Glob('hal.cpp')
+
+# add button hal
+if GetDepend(['OFFLINE_PKG_USING_MULTIBUTTON']):
+    src += Glob('hal_button.cpp')
+
+#add lcd hal
+if GetDepend(['BSP_USING_ONBOARD_LCD']):
+    src += Glob('hal_lcd.cpp')
+
+#add rtc hal
+if GetDepend(['BSP_USING_ONCHIP_RTC']):
+    src += Glob('hal_rtc.cpp')
+
+#add sd hal
+if GetDepend(['BSP_USING_SDCARD_FATFS']):
+    src += Glob('hal_sdcard.cpp')
+
+#add spi flash
+if GetDepend(['BSP_USING_SPI_FLASH']):
+    src += Glob('hal_spi_flash.cpp')
+    
+CPPDEFINES = ['STM32F407xx']
+group = DefineGroup('hal', src, depend = [''], CPPPATH = path, CPPDEFINES = CPPDEFINES)
+
+list = os.listdir(cwd)
+for item in list:
+    if os.path.isfile(os.path.join(cwd, item, 'SConscript')):
+        group = group + SConscript(os.path.join(item, 'SConscript'))
+
+Return('group')

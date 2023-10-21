@@ -1,0 +1,46 @@
+import os
+import rtconfig
+from building import *
+
+Import('SDK_LIB')
+
+cwd = GetCurrentDir()
+
+# add general drivers
+src = []
+path =  [cwd]
+
+#add lcd module
+if GetDepend(['BSP_USING_SRAM']):
+    src += Glob('drv_sram.c')
+    
+if GetDepend(['BSP_USING_ONBOARD_LCD']):
+    src += Glob('lcd_st7789/*.c')
+    path += [cwd + '/lcd_st7789']
+
+# File System
+if GetDepend(['BSP_USING_FS']):
+    src += Glob('drv_filesystem.c')
+
+# NorFlash W25Q64
+if GetDepend(['BSP_USING_SPI_FLASH']):
+    src += Glob('spi_falsh_w25q64/*.c')
+    path += [cwd + '/spi_falsh_w25q64']
+
+#add audio module
+if GetDepend(['BSP_USING_AUDIO']):
+    src += Glob('audio_es8388/*.c')
+    path += [cwd + '/audio_es8388']
+
+if GetDepend(['BSP_USING_AUDIO_RECORD']):
+    src += Glob('audio_es8388/*.c')
+
+CPPDEFINES = ['STM32F407xx']
+group = DefineGroup('board_drivers', src, depend = [''], CPPPATH = path, CPPDEFINES = CPPDEFINES)
+
+list = os.listdir(cwd)
+for item in list:
+    if os.path.isfile(os.path.join(cwd, item, 'SConscript')):
+        group = group + SConscript(os.path.join(item, 'SConscript'))
+
+Return('group')
